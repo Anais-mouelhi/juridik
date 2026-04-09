@@ -1,0 +1,41 @@
+{
+  "name": "Dossier",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "client": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "urgent",
+        "en_cours",
+        "stable",
+        "en_attente"
+      ]
+    },
+    "type": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "next_hearing": {
+      "type": "string"
+    },
+    "jurisprudences": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  },
+  "required": [
+    "title",
+    "client",
+    "status"
+  ]
+}

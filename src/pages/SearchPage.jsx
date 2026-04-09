@@ -1,11 +1,8 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { Sparkles, SlidersHorizontal, Scale } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Search, Sparkles, Plus, FileText, Download, ChevronRight, Filter } from "lucide-react";
 import { motion } from "framer-motion";
-import SearchBar from "../components/search/SearchBar";
 import SearchFilters from "../components/search/SearchFilters";
-import SearchResultCard from "../components/search/SearchResultCard";
 import CaseDetailView from "../components/case/CaseDetailView";
 
 export default function SearchPage() {
@@ -16,43 +13,26 @@ export default function SearchPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
   const [selectedCase, setSelectedCase] = useState(null);
-  const [savedIds, setSavedIds] = useState(new Set());
+  const [dossiers, setDossiers] = useState([]);
+  const [activeTab, setActiveTab] = useState("results");
+  const [addingTo, setAddingTo] = useState(null);
 
-  // Load URL query param
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const q = params.get("q");
-    if (q) {
-      setQuery(q);
-      performSearch(q, {});
-    }
-  }, []);
-
-  // Load saved cases to track which ones are saved
-  useEffect(() => {
-    base44.entities.SavedCase.list('-created_date', 200).then((saved) => {
-      setSavedIds(new Set(saved.map((s) => s.reference)));
-    });
+    if (q) { setQuery(q); performSearch(q, {}); }
+    base44.entities.Dossier.list('-created_date', 50).then(setDossiers);
   }, []);
 
   const performSearch = async (searchQuery, searchFilters) => {
     setIsLoading(true);
     setHasSearched(true);
-
     const filterText = Object.entries(searchFilters || {})
       .filter(([, v]) => v && !v.startsWith("Tous") && !v.startsWith("Toutes"))
-      .map(([k, v]) => `${k}: ${v}`)
-      .join(", ");
-
-    const prompt = `Tu es un expert en droit du travail français. L'utilisateur recherche des jurisprudences sur le sujet suivant:
-
-Requête: "${searchQuery}"
-${filterText ? `Filtres: ${filterText}` : ''}
-
-Génère 5 résultats de jurisprudence réalistes et pertinents en droit du travail français. Pour chaque résultat, fournis des informations plausibles et détaillées. Les résultats doivent être variés en termes de juridictions et de dates.`;
+      .map(([k, v]) => `${k}: ${v}`).join(", ");
 
     const response = await base44.integrations.Core.InvokeLLM({
-      prompt,
+      prompt: `Tu es un expert en droit du travail français. L'utilisateur recherche des jurisprudences sur: "${searchQuery}"${filterText ? `. Filtres: ${filterText}` : ''}. Génère 4 résultats réalistes et pertinents avec des références plausibles (pourvoi, chambre sociale).`,
       response_json_schema: {
         type: "object",
         properties: {
@@ -63,8 +43,10 @@ Génère 5 résultats de jurisprudence réalistes et pertinents en droit du trav
               properties: {
                 title: { type: "string" },
                 jurisdiction: { type: "string" },
+                chamber: { type: "string" },
                 date: { type: "string" },
                 reference: { type: "string" },
+                source: { type: "string" },
                 summary: { type: "string" },
                 topics: { type: "array", items: { type: "string" } },
                 key_points: { type: "array", items: { type: "string" } },
@@ -80,7 +62,6 @@ Génère 5 résultats de jurisprudence réalistes et pertinents en droit du trav
     setResults(searchResults);
     setIsLoading(false);
 
-    // Save search history
     await base44.entities.SearchHistory.create({
       query: searchQuery,
       filters: searchFilters,
@@ -88,123 +69,208 @@ Génère 5 résultats de jurisprudence réalistes et pertinents en droit du trav
     });
   };
 
-  const handleSearch = () => {
-    performSearch(query, filters);
+  const handleAddToDossier = async (result, dossierId) => {
+    const dossier = dossiers.find(d => d.id === dossierId);
+    if (!dossier) return;
+    const existing = dossier.jurisprudences || [];
+    await base44.entities.Dossier.update(dossierId, {
+      jurisprudences: [...existing, { title: result.title, reference: result.reference, date: result.date }]
+    });
+    setAddingTo(null);
   };
 
-  const handleSave = async (caseData) => {
-    if (savedIds.has(caseData.reference)) return;
-
-    await base44.entities.SavedCase.create({
-      title: caseData.title,
-      jurisdiction: caseData.jurisdiction,
-      date: caseData.date,
-      reference: caseData.reference,
-      summary: caseData.summary,
-      full_text: caseData.full_text,
-      topics: caseData.topics,
-      key_points: caseData.key_points,
-    });
-
-    setSavedIds((prev) => new Set([...prev, caseData.reference]));
+  const exportPDF = (result) => {
+    const content = `${result.title}\n${result.reference} - ${result.date}\n\n${result.summary}`;
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = `${result.reference}.txt`; a.click();
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-8">
-      {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-serif font-semibold text-foreground">Recherche jurisprudentielle</h1>
-        <p className="text-sm text-muted-foreground mt-1">
-          Décrivez votre problématique en langage naturel
-        </p>
+    <div className="flex flex-col h-full">
+      {/* Top bar */}
+      <div className="flex items-center gap-4 px-6 py-4 border-b border-border bg-background/80 backdrop-blur sticky top-0 z-10">
+        <div>
+          <p className="text-xs text-muted-foreground uppercase tracking-widest">Recherche</p>
+          <p className="text-lg font-serif font-semibold text-foreground leading-none mt-0.5">IA</p>
+        </div>
+        <div className="flex-1 relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <input
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' && query.trim() && performSearch(query, filters)}
+            placeholder="Rechercher une jurisprudence..."
+            className="w-full bg-card border border-border rounded-xl pl-10 pr-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50"
+          />
+        </div>
+        <button
+          onClick={() => query.trim() && performSearch(query, filters)}
+          disabled={!query.trim() || isLoading}
+          className="flex items-center gap-2 px-4 py-2.5 bg-primary text-primary-foreground rounded-xl text-sm font-medium hover:bg-primary/90 disabled:opacity-50 transition-colors"
+        >
+          {isLoading ? <div className="h-4 w-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" /> : <Plus className="h-4 w-4" />}
+          Nouvelle recherche
+        </button>
       </div>
 
-      {/* Search bar */}
-      <div className="space-y-3 mb-6">
-        <SearchBar query={query} setQuery={setQuery} onSearch={handleSearch} isLoading={isLoading} />
-        
-        <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setShowFilters(!showFilters)}
-            className="gap-1.5 text-xs text-muted-foreground"
-          >
-            <SlidersHorizontal className="h-3.5 w-3.5" />
-            {showFilters ? 'Masquer les filtres' : 'Filtres avancés'}
-          </Button>
-        </div>
+      <div className="flex-1 overflow-y-auto">
+        <div className="max-w-4xl mx-auto p-6 space-y-6">
+          {/* Search panel */}
+          <div className="bg-card rounded-xl border border-border overflow-hidden">
+            <div className="p-5 border-b border-border flex items-center justify-between">
+              <div>
+                <h2 className="text-base font-semibold text-foreground">Recherche jurisprudentielle IA</h2>
+              </div>
+              <span className="text-[11px] px-3 py-1 rounded-full bg-primary/15 text-primary border border-primary/20 font-medium">
+                Spécialisée droit du travail
+              </span>
+            </div>
+            <div className="p-5">
+              <div className="flex gap-3 mb-4">
+                <div className="relative flex-1">
+                  <input
+                    value={query}
+                    onChange={e => setQuery(e.target.value)}
+                    onKeyDown={e => e.key === 'Enter' && query.trim() && performSearch(query, filters)}
+                    placeholder="Ex : faute grave et ancienneté du salarié..."
+                    className="w-full bg-background border border-border rounded-lg px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50"
+                  />
+                </div>
+                <button
+                  onClick={() => query.trim() && performSearch(query, filters)}
+                  disabled={!query.trim() || isLoading}
+                  className="px-5 py-3 bg-card border border-border text-foreground rounded-lg text-sm font-medium hover:bg-muted disabled:opacity-50 transition-colors flex items-center gap-2"
+                >
+                  {isLoading ? <div className="h-4 w-4 border-2 border-muted-foreground/30 border-t-foreground rounded-full animate-spin" /> : <Search className="h-4 w-4" />}
+                  Rechercher
+                </button>
+                <button
+                  onClick={() => setShowFilters(!showFilters)}
+                  className="px-4 py-3 bg-card border border-border text-muted-foreground rounded-lg text-sm hover:text-foreground hover:bg-muted transition-colors"
+                >
+                  <Filter className="h-4 w-4" />
+                </button>
+              </div>
+              {showFilters && <SearchFilters filters={filters} setFilters={setFilters} />}
+            </div>
+          </div>
 
-        {showFilters && <SearchFilters filters={filters} setFilters={setFilters} />}
+          {/* Results */}
+          {hasSearched && !isLoading && (
+            <div className="bg-card rounded-xl border border-border overflow-hidden">
+              {/* Tabs */}
+              <div className="flex items-center gap-6 px-5 py-3 border-b border-border">
+                {[
+                  { id: "results", label: `Résultats (${results.length})` },
+                  { id: "theme", label: "Par thème" },
+                  { id: "chrono", label: "Chronologique" },
+                ].map(tab => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`text-sm pb-1 transition-colors ${activeTab === tab.id ? 'text-primary font-medium border-b-2 border-primary' : 'text-muted-foreground hover:text-foreground'}`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+              <div className="divide-y divide-border">
+                {results.map((result, index) => (
+                  <motion.div
+                    key={result.reference}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: index * 0.07 }}
+                    className="p-5"
+                  >
+                    <div className="mb-2">
+                      <h3 className="text-sm font-semibold text-foreground leading-snug mb-1">
+                        {result.title}
+                      </h3>
+                      <p className="text-xs text-muted-foreground">
+                        {result.chamber} · {result.reference} · {result.source || 'Légifrance'}
+                      </p>
+                    </div>
+                    <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                      {result.summary}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {/* Add to dossier */}
+                      {addingTo === result.reference ? (
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="text-xs text-muted-foreground">Ajouter à :</span>
+                          {dossiers.length === 0 ? (
+                            <span className="text-xs text-muted-foreground">Aucun dossier</span>
+                          ) : dossiers.map(d => (
+                            <button
+                              key={d.id}
+                              onClick={() => handleAddToDossier(result, d.id)}
+                              className="text-xs px-3 py-1.5 bg-primary/15 text-primary rounded-lg hover:bg-primary/25 transition-colors"
+                            >
+                              {d.title}
+                            </button>
+                          ))}
+                          <button onClick={() => setAddingTo(null)} className="text-xs text-muted-foreground hover:text-foreground">Annuler</button>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => setAddingTo(result.reference)}
+                          className="flex items-center gap-1.5 text-xs px-4 py-2 bg-card border border-border text-foreground rounded-lg hover:bg-muted transition-colors font-medium"
+                        >
+                          <Plus className="h-3.5 w-3.5" />
+                          Ajouter au dossier
+                        </button>
+                      )}
+                      <button
+                        onClick={() => setSelectedCase(result)}
+                        className="flex items-center gap-1.5 text-xs px-4 py-2 bg-card border border-border text-foreground rounded-lg hover:bg-muted transition-colors font-medium"
+                      >
+                        <FileText className="h-3.5 w-3.5" />
+                        Résumé complet
+                      </button>
+                      <button
+                        onClick={() => exportPDF(result)}
+                        className="flex items-center gap-1.5 text-xs px-4 py-2 bg-card border border-border text-foreground rounded-lg hover:bg-muted transition-colors font-medium"
+                      >
+                        <Download className="h-3.5 w-3.5" />
+                        Export PDF
+                      </button>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {isLoading && (
+            <div className="flex flex-col items-center justify-center py-20">
+              <div className="relative">
+                <div className="w-14 h-14 border-4 border-primary/10 border-t-primary rounded-full animate-spin" />
+                <Sparkles className="h-5 w-5 text-primary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+              </div>
+              <p className="text-sm text-muted-foreground mt-4">Analyse IA en cours...</p>
+            </div>
+          )}
+
+          {!hasSearched && !isLoading && (
+            <div className="text-center py-20">
+              <Search className="h-10 w-10 mx-auto text-muted-foreground/20 mb-4" />
+              <p className="text-foreground font-medium mb-1">Recherche jurisprudentielle IA</p>
+              <p className="text-sm text-muted-foreground max-w-sm mx-auto">
+                Décrivez votre situation juridique en langage naturel.
+              </p>
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* Results */}
-      {isLoading && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="flex flex-col items-center justify-center py-20"
-        >
-          <div className="relative">
-            <div className="w-16 h-16 border-4 border-primary/10 border-t-primary rounded-full animate-spin" />
-            <Sparkles className="h-6 w-6 text-accent absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
-          </div>
-          <p className="text-sm text-muted-foreground mt-4">Analyse IA en cours...</p>
-          <p className="text-xs text-muted-foreground/60 mt-1">Recherche dans la jurisprudence du droit du travail</p>
-        </motion.div>
-      )}
-
-      {!isLoading && hasSearched && results.length > 0 && (
-        <div className="space-y-4">
-          <p className="text-sm text-muted-foreground">
-            <span className="font-medium text-foreground">{results.length} résultats</span> trouvés
-          </p>
-          {results.map((result, index) => (
-            <SearchResultCard
-              key={result.reference}
-              result={result}
-              index={index}
-              onSave={handleSave}
-              onView={setSelectedCase}
-              isSaved={savedIds.has(result.reference)}
-            />
-          ))}
-        </div>
-      )}
-
-      {!isLoading && hasSearched && results.length === 0 && (
-        <div className="flex flex-col items-center justify-center py-20">
-          <Scale className="h-12 w-12 text-muted-foreground/30" />
-          <p className="text-sm text-muted-foreground mt-4">Aucun résultat trouvé</p>
-          <p className="text-xs text-muted-foreground/60 mt-1">Essayez de reformuler votre recherche</p>
-        </div>
-      )}
-
-      {!hasSearched && !isLoading && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
-          className="flex flex-col items-center justify-center py-20"
-        >
-          <div className="h-20 w-20 rounded-2xl bg-primary/5 flex items-center justify-center mb-4">
-            <Sparkles className="h-8 w-8 text-primary/40" />
-          </div>
-          <p className="text-foreground font-medium">Recherche intelligente</p>
-          <p className="text-sm text-muted-foreground mt-1 text-center max-w-md">
-            Posez votre question en langage naturel. Par exemple : 
-            <span className="italic"> "licenciement pour faute grave d'un salarié en arrêt maladie"</span>
-          </p>
-        </motion.div>
-      )}
-
-      {/* Case detail modal */}
       {selectedCase && (
         <CaseDetailView
           caseData={selectedCase}
           onClose={() => setSelectedCase(null)}
-          onSave={handleSave}
-          isSaved={savedIds.has(selectedCase.reference)}
+          onSave={() => {}}
+          isSaved={false}
         />
       )}
     </div>

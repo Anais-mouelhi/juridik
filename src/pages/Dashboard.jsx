@@ -1,127 +1,167 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
-import { Search, BookMarked, History, Scale, ArrowRight, Sparkles, ArrowUpRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Search, FolderOpen, CheckSquare, Calendar, ArrowRight, Plus, AlertCircle, Clock, TrendingUp } from "lucide-react";
 import { motion } from "framer-motion";
-import StatsCard from "../components/dashboard/StatsCard";
-import RecentSearchItem from "../components/dashboard/RecentSearchItem";
+
+const statusConfig = {
+  urgent: { label: "Urgent", color: "bg-red-500/20 text-red-400 border-red-500/30" },
+  en_cours: { label: "En cours", color: "bg-primary/20 text-primary border-primary/30" },
+  stable: { label: "Stable", color: "bg-green-500/20 text-green-400 border-green-500/30" },
+  en_attente: { label: "En attente", color: "bg-muted text-muted-foreground border-border" },
+};
 
 export default function Dashboard() {
   const [user, setUser] = useState(null);
-  const [recentSearches, setRecentSearches] = useState([]);
-  const [savedCount, setSavedCount] = useState(0);
+  const [dossiers, setDossiers] = useState([]);
+  const [tasks, setTasks] = useState([]);
+  const [searches, setSearches] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => { loadData(); }, []);
-
-  const loadData = async () => {
-    setIsLoading(true);
-    const [me, searches, saved] = await Promise.all([
+  useEffect(() => {
+    Promise.all([
       base44.auth.me(),
-      base44.entities.SearchHistory.list('-created_date', 5),
-      base44.entities.SavedCase.list('-created_date', 50),
-    ]);
-    setUser(me);
-    setRecentSearches(searches);
-    setSavedCount(saved.length);
-    setIsLoading(false);
-  };
+      base44.entities.Dossier.list('-created_date', 20),
+      base44.entities.Task.filter({ completed: false }, '-created_date', 20),
+      base44.entities.SearchHistory.list('-created_date', 50),
+    ]).then(([me, d, t, s]) => {
+      setUser(me);
+      setDossiers(d);
+      setTasks(t);
+      setSearches(s);
+      setIsLoading(false);
+    });
+  }, []);
 
-  const greeting = () => {
-    const h = new Date().getHours();
-    if (h < 12) return "Bonjour";
-    if (h < 18) return "Bon après-midi";
-    return "Bonsoir";
-  };
+  if (isLoading) return (
+    <div className="flex items-center justify-center h-full">
+      <div className="w-7 h-7 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
+    </div>
+  );
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-full">
-        <div className="w-8 h-8 border-4 border-foreground/10 border-t-foreground/50 rounded-full animate-spin" />
-      </div>
-    );
-  }
+  const urgentCount = dossiers.filter(d => d.status === 'urgent').length;
+  const todayTasks = tasks.filter(t => t.due_date === new Date().toISOString().split('T')[0]);
+
+  const stats = [
+    { icon: FolderOpen, label: "Dossiers actifs", value: dossiers.length, sub: `${urgentCount} urgent${urgentCount !== 1 ? 's' : ''}` },
+    { icon: Search, label: "Recherches", value: searches.length, sub: "Total effectuées" },
+    { icon: CheckSquare, label: "Tâches en cours", value: tasks.length, sub: `${todayTasks.length} aujourd'hui` },
+    { icon: Calendar, label: "Audiences", value: dossiers.filter(d => d.next_hearing).length, sub: "Cette semaine" },
+  ];
 
   return (
-    <div className="p-6 lg:p-8 max-w-5xl mx-auto">
-      {/* Welcome */}
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="mb-8"
-      >
-        <p className="text-sm text-muted-foreground mb-1">{greeting()}</p>
-        <h1 className="font-serif text-4xl font-semibold text-foreground leading-tight">
-          {user?.full_name?.split(' ')[0] || 'Maître'}
+    <div className="p-6 lg:p-8 max-w-6xl mx-auto space-y-8">
+      {/* Header */}
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
+        <p className="text-muted-foreground text-sm mb-1">Tableau de bord</p>
+        <h1 className="text-3xl font-serif font-semibold text-foreground">
+          Bonjour, {user?.full_name?.split(' ')[0] || 'Maître'}
         </h1>
       </motion.div>
 
-      {/* Hero search CTA */}
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.1 }}
-        className="mb-6"
-      >
-        <Link to="/search">
-          <div className="relative bg-primary rounded-3xl p-8 overflow-hidden group cursor-pointer hover:shadow-xl transition-shadow duration-300">
-            <div className="absolute -top-10 -right-10 w-52 h-52 rounded-full bg-white/5" />
-            <div className="absolute -bottom-8 -right-4 w-36 h-36 rounded-full bg-white/5" />
-            <div className="relative z-10 flex items-end justify-between">
-              <div>
-                <p className="text-primary-foreground/50 text-xs uppercase tracking-widest mb-3">IA · Droit du travail</p>
-                <h2 className="font-serif text-2xl font-semibold text-primary-foreground leading-snug max-w-xs">
-                  Trouvez la jurisprudence qu'il vous faut
-                </h2>
-                <p className="text-primary-foreground/60 text-sm mt-2 max-w-sm">
-                  Décrivez votre problématique en langage naturel.
-                </p>
+      {/* Stats */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {stats.map((s, i) => (
+          <motion.div
+            key={s.label}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: i * 0.07 }}
+            className="bg-card rounded-xl border border-border p-5"
+          >
+            <div className="flex items-center justify-between mb-3">
+              <s.icon className="h-4 w-4 text-muted-foreground" />
+              <TrendingUp className="h-3 w-3 text-primary/60" />
+            </div>
+            <p className="text-3xl font-serif font-semibold text-foreground">{s.value}</p>
+            <p className="text-sm text-foreground/80 font-medium mt-1">{s.label}</p>
+            <p className="text-xs text-muted-foreground mt-0.5">{s.sub}</p>
+          </motion.div>
+        ))}
+      </div>
+
+      <div className="grid lg:grid-cols-2 gap-6">
+        {/* Dossiers récents */}
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.3 }}
+          className="bg-card rounded-xl border border-border overflow-hidden"
+        >
+          <div className="flex items-center justify-between px-5 py-4 border-b border-border">
+            <h2 className="text-sm font-semibold text-foreground">Dossiers en cours</h2>
+            <Link to="/dossiers" className="text-xs text-primary hover:text-primary/80 flex items-center gap-1 transition-colors">
+              Voir tout <ArrowRight className="h-3 w-3" />
+            </Link>
+          </div>
+          <div className="divide-y divide-border">
+            {dossiers.length === 0 ? (
+              <div className="px-5 py-8 text-center text-sm text-muted-foreground">
+                <FolderOpen className="h-8 w-8 mx-auto mb-2 opacity-30" />
+                Aucun dossier. <Link to="/dossiers" className="text-primary hover:underline">Créer un dossier</Link>
               </div>
-              <div className="hidden sm:flex items-center justify-center h-12 w-12 rounded-2xl bg-primary-foreground/10 group-hover:bg-primary-foreground/20 transition-colors flex-shrink-0">
-                <ArrowUpRight className="h-5 w-5 text-primary-foreground" />
+            ) : dossiers.slice(0, 5).map(d => {
+              const sc = statusConfig[d.status] || statusConfig.en_cours;
+              return (
+                <div key={d.id} className="flex items-center gap-3 px-5 py-3">
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-foreground truncate">{d.title}</p>
+                    <p className="text-xs text-muted-foreground">{d.client}</p>
+                  </div>
+                  <span className={`text-[11px] px-2 py-0.5 rounded-md border font-medium flex-shrink-0 ${sc.color}`}>
+                    {sc.label}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </motion.div>
+
+        {/* Tâches prioritaires */}
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.4 }}
+          className="bg-card rounded-xl border border-border overflow-hidden"
+        >
+          <div className="flex items-center justify-between px-5 py-4 border-b border-border">
+            <h2 className="text-sm font-semibold text-foreground">Tâches prioritaires</h2>
+            <Link to="/taches" className="text-xs text-primary hover:text-primary/80 flex items-center gap-1 transition-colors">
+              Voir tout <ArrowRight className="h-3 w-3" />
+            </Link>
+          </div>
+          <div className="divide-y divide-border">
+            {tasks.length === 0 ? (
+              <div className="px-5 py-8 text-center text-sm text-muted-foreground">
+                <CheckSquare className="h-8 w-8 mx-auto mb-2 opacity-30" />
+                Aucune tâche. <Link to="/taches" className="text-primary hover:underline">Ajouter une tâche</Link>
+              </div>
+            ) : tasks.slice(0, 5).map(t => (
+              <div key={t.id} className="flex items-center gap-3 px-5 py-3">
+                {t.priority === 'urgent' && <AlertCircle className="h-3.5 w-3.5 text-red-400 flex-shrink-0" />}
+                {t.priority !== 'urgent' && <Clock className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />}
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm text-foreground truncate">{t.title}</p>
+                  {t.dossier_name && <p className="text-xs text-muted-foreground">{t.dossier_name}</p>}
+                </div>
+                {t.due_date && <p className="text-xs text-muted-foreground flex-shrink-0">{t.due_date}</p>}
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Quick search CTA */}
+      <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.5 }}>
+        <Link to="/search">
+          <div className="relative bg-card rounded-xl border border-primary/30 p-6 hover:border-primary/60 transition-colors group overflow-hidden">
+            <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="relative flex items-center justify-between">
+              <div>
+                <p className="text-xs text-primary uppercase tracking-widest mb-1">Recherche IA</p>
+                <p className="text-lg font-serif font-semibold text-foreground">Lancer une nouvelle recherche jurisprudentielle</p>
+                <p className="text-sm text-muted-foreground mt-1">Décrivez votre situation en langage naturel</p>
+              </div>
+              <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors flex-shrink-0 ml-4">
+                <ArrowRight className="h-5 w-5 text-primary" />
               </div>
             </div>
           </div>
         </Link>
-      </motion.div>
-
-      {/* Stats grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-        <StatsCard icon={Search} label="Recherches" value={recentSearches.length} subtitle="Total effectuées" delay={0.2} />
-        <StatsCard icon={BookMarked} label="Sauvegardées" value={savedCount} subtitle="Dans votre bibliothèque" delay={0.3} dark />
-        <StatsCard icon={Scale} label="Thématiques" value="11" subtitle="Domaines couverts" delay={0.4} />
-      </div>
-
-      {/* Recent searches */}
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.5 }}
-        className="bg-card rounded-3xl border border-border overflow-hidden"
-      >
-        <div className="flex items-center justify-between px-6 py-5 border-b border-border">
-          <div className="flex items-center gap-2">
-            <History className="h-4 w-4 text-muted-foreground" />
-            <h3 className="text-sm font-semibold text-foreground">Recherches récentes</h3>
-          </div>
-          <Link to="/history" className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors">
-            Tout voir <ArrowRight className="h-3 w-3" />
-          </Link>
-        </div>
-        <div>
-          {recentSearches.length === 0 ? (
-            <div className="px-6 py-10 text-center text-sm text-muted-foreground">
-              <Sparkles className="h-8 w-8 mx-auto mb-3 text-muted-foreground/30" />
-              Lancez votre première recherche.
-            </div>
-          ) : (
-            recentSearches.map((search) => (
-              <RecentSearchItem key={search.id} search={search} />
-            ))
-          )}
-        </div>
       </motion.div>
     </div>
   );

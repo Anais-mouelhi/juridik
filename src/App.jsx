@@ -8,9 +8,10 @@ import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
 import SearchPage from './pages/SearchPage';
-import SavedCases from './pages/SavedCases';
-import HistoryPage from './pages/HistoryPage';
-import SettingsPage from './pages/SettingsPage';
+import DossiersPage from './pages/DossiersPage';
+import TachesPage from './pages/TachesPage';
+import CalendrierPage from './pages/CalendrierPage';
+import ProfilPage from './pages/ProfilPage';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -41,9 +42,10 @@ const AuthenticatedApp = () => {
       <Route element={<Layout />}>
         <Route path="/" element={<Dashboard />} />
         <Route path="/search" element={<SearchPage />} />
-        <Route path="/saved" element={<SavedCases />} />
-        <Route path="/history" element={<HistoryPage />} />
-        <Route path="/settings" element={<SettingsPage />} />
+        <Route path="/dossiers" element={<DossiersPage />} />
+        <Route path="/taches" element={<TachesPage />} />
+        <Route path="/calendrier" element={<CalendrierPage />} />
+        <Route path="/profil" element={<ProfilPage />} />
         <Route path="*" element={<PageNotFound />} />
       </Route>
     </Routes>

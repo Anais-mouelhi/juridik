@@ -1,0 +1,32 @@
+{
+  "name": "Task",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "dossier_id": {
+      "type": "string"
+    },
+    "dossier_name": {
+      "type": "string"
+    },
+    "due_date": {
+      "type": "string"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "urgent",
+        "normal",
+        "low"
+      ]
+    },
+    "completed": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "title"
+  ]
+}
