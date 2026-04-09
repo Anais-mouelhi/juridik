@@ -1,13 +1,13 @@
 import { Outlet, Link, useLocation } from "react-router-dom";
-import { Scale, Search, BookMarked, History, Settings, LogOut, Menu, X } from "lucide-react";
+import { Scale, Search, BookMarked, History, Settings, LogOut, Menu } from "lucide-react";
 import { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 
 const navItems = [
-  { path: "/", label: "Tableau de bord", icon: Scale },
+  { path: "/", label: "Vue d'ensemble", icon: Scale },
   { path: "/search", label: "Recherche", icon: Search },
-  { path: "/saved", label: "Décisions sauvegardées", icon: BookMarked },
+  { path: "/saved", label: "Sauvegardées", icon: BookMarked },
   { path: "/history", label: "Historique", icon: History },
   { path: "/settings", label: "Paramètres", icon: Settings },
 ];
@@ -18,26 +18,26 @@ export default function Layout() {
 
   return (
     <div className="flex h-screen overflow-hidden bg-background">
-      {/* Sidebar */}
+      {/* Sidebar — slim icon + label column */}
       <aside className={`
-        fixed inset-y-0 left-0 z-50 w-64 bg-sidebar flex flex-col
+        fixed inset-y-0 left-0 z-50 w-56 bg-background border-r border-border flex flex-col
         transform transition-transform duration-300 ease-in-out
-        lg:relative lg:translate-x-0
+        lg:relative lg:translate-x-0 lg:w-52
         ${mobileOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
         {/* Logo */}
-        <div className="flex items-center gap-3 px-6 py-6 border-b border-sidebar-border">
-          <div className="h-9 w-9 rounded-lg bg-sidebar-primary flex items-center justify-center">
-            <Scale className="h-5 w-5 text-sidebar-primary-foreground" />
+        <div className="flex items-center gap-3 px-5 pt-7 pb-6">
+          <div className="h-8 w-8 rounded-xl bg-primary flex items-center justify-center">
+            <Scale className="h-4 w-4 text-primary-foreground" />
           </div>
           <div>
-            <h1 className="font-serif text-lg font-semibold text-sidebar-foreground tracking-tight">JurisIA</h1>
-            <p className="text-[10px] uppercase tracking-[0.2em] text-sidebar-foreground/50">Droit du travail</p>
+            <p className="font-serif font-semibold text-sm text-foreground leading-none">JurisIA</p>
+            <p className="text-[10px] text-muted-foreground mt-0.5 tracking-wide">Droit du travail</p>
           </div>
         </div>
 
-        {/* Navigation */}
-        <nav className="flex-1 px-3 py-4 space-y-1">
+        {/* Nav */}
+        <nav className="flex-1 px-3 space-y-0.5">
           {navItems.map((item) => {
             const isActive = location.pathname === item.path;
             return (
@@ -46,51 +46,49 @@ export default function Layout() {
                 to={item.path}
                 onClick={() => setMobileOpen(false)}
                 className={`
-                  flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200
+                  flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all duration-200
                   ${isActive
-                    ? 'bg-sidebar-accent text-sidebar-primary'
-                    : 'text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent/50'
+                    ? 'bg-primary text-primary-foreground font-medium'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                   }
                 `}
               >
-                <item.icon className="h-4 w-4" />
-                {item.label}
+                <item.icon className="h-4 w-4 flex-shrink-0" />
+                <span>{item.label}</span>
               </Link>
             );
           })}
         </nav>
 
-        {/* Footer */}
-        <div className="px-3 py-4 border-t border-sidebar-border">
+        {/* Bottom */}
+        <div className="px-3 pb-6 mt-4">
           <button
             onClick={() => base44.auth.logout()}
-            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-sidebar-foreground/50 hover:text-sidebar-foreground hover:bg-sidebar-accent/50 w-full transition-colors"
+            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-muted-foreground hover:text-foreground hover:bg-muted w-full transition-colors"
           >
             <LogOut className="h-4 w-4" />
-            Déconnexion
+            <span>Déconnexion</span>
           </button>
         </div>
       </aside>
 
       {/* Mobile overlay */}
       {mobileOpen && (
-        <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={() => setMobileOpen(false)} />
+        <div className="fixed inset-0 bg-black/30 z-40 lg:hidden" onClick={() => setMobileOpen(false)} />
       )}
 
-      {/* Main content */}
+      {/* Main */}
       <main className="flex-1 flex flex-col overflow-hidden">
-        {/* Top bar mobile */}
-        <header className="lg:hidden flex items-center justify-between px-4 py-3 border-b border-border bg-card">
+        <header className="lg:hidden flex items-center justify-between px-4 py-3 border-b border-border bg-background">
           <Button variant="ghost" size="icon" onClick={() => setMobileOpen(true)}>
             <Menu className="h-5 w-5" />
           </Button>
           <div className="flex items-center gap-2">
-            <Scale className="h-5 w-5 text-primary" />
-            <span className="font-serif font-semibold">JurisIA</span>
+            <Scale className="h-5 w-5 text-foreground" />
+            <span className="font-serif font-semibold text-sm">JurisIA</span>
           </div>
           <div className="w-10" />
         </header>
-
         <div className="flex-1 overflow-y-auto">
           <Outlet />
         </div>
