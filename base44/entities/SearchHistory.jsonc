@@ -1,0 +1,35 @@
+{
+  "name": "SearchHistory",
+  "type": "object",
+  "properties": {
+    "query": {
+      "type": "string",
+      "description": "Requ\u00eate de recherche"
+    },
+    "filters": {
+      "type": "object",
+      "description": "Filtres appliqu\u00e9s",
+      "properties": {
+        "date_from": {
+          "type": "string"
+        },
+        "date_to": {
+          "type": "string"
+        },
+        "jurisdiction": {
+          "type": "string"
+        },
+        "topic": {
+          "type": "string"
+        }
+      }
+    },
+    "results_count": {
+      "type": "number",
+      "description": "Nombre de r\u00e9sultats trouv\u00e9s"
+    }
+  },
+  "required": [
+    "query"
+  ]
+}

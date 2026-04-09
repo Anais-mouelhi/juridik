@@ -1,0 +1,56 @@
+{
+  "name": "SavedCase",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Titre de la d\u00e9cision"
+    },
+    "jurisdiction": {
+      "type": "string",
+      "description": "Juridiction"
+    },
+    "date": {
+      "type": "string",
+      "description": "Date de la d\u00e9cision"
+    },
+    "reference": {
+      "type": "string",
+      "description": "R\u00e9f\u00e9rence de la d\u00e9cision"
+    },
+    "summary": {
+      "type": "string",
+      "description": "R\u00e9sum\u00e9 IA de la d\u00e9cision"
+    },
+    "full_text": {
+      "type": "string",
+      "description": "Texte complet de la d\u00e9cision"
+    },
+    "topics": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Th\u00e9matiques juridiques"
+    },
+    "key_points": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Points cl\u00e9s de la d\u00e9cision"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Notes personnelles"
+    },
+    "folder": {
+      "type": "string",
+      "description": "Dossier de classement"
+    }
+  },
+  "required": [
+    "title",
+    "reference"
+  ]
+}
