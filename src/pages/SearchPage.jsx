@@ -292,16 +292,15 @@ export default function SearchPage() {
             </div>
           )}
         </div>
-      </div>
 
-      {selectedCase && (
-        <CaseDetailView
-          caseData={selectedCase}
-          onClose={() => setSelectedCase(null)}
-          onSave={() => {}}
-          isSaved={false}
-        />
-      )}
-    </div>
+        {selectedCase && (
+          <CaseDetailView
+            caseData={selectedCase}
+            onClose={() => setSelectedCase(null)}
+            onSave={() => {}}
+            isSaved={false}
+          />
+        )}
+      </div>
   );
 }
