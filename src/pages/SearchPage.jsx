@@ -21,6 +21,15 @@ const themes = [
 ];
 
 export default function SearchPage() {
+  const [query, setQuery] = useState("");
+  const [filters, setFilters] = useState({});
+  const [results, setResults] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasSearched, setHasSearched] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
+  const [selectedCase, setSelectedCase] = useState(null);
+  const [dossiers, setDossiers] = useState([]);
+  const [activeTab, setActiveTab] = useState("results");
   const [addingTo, setAddingTo] = useState(null);
 
   const handleTheme = (theme) => {
