@@ -5,17 +5,28 @@ import { motion } from "framer-motion";
 import SearchFilters from "../components/search/SearchFilters";
 import CaseDetailView from "../components/case/CaseDetailView";
 
+const themes = [
+  { label: "Licenciement abusif", icon: "⚖️" },
+  { label: "Faute grave", icon: "🔴" },
+  { label: "Harcèlement moral", icon: "🛡️" },
+  { label: "Discrimination", icon: "🚫" },
+  { label: "Rupture conventionnelle", icon: "🤝" },
+  { label: "Clause de non-concurrence", icon: "🔒" },
+  { label: "Temps de travail", icon: "🕐" },
+  { label: "Heures supplémentaires", icon: "📋" },
+  { label: "Arrêt maladie", icon: "🏥" },
+  { label: "Salaire et primes", icon: "💶" },
+  { label: "CDD / CDI", icon: "📄" },
+  { label: "Période d'essai", icon: "🔍" },
+];
+
 export default function SearchPage() {
-  const [query, setQuery] = useState("");
-  const [filters, setFilters] = useState({});
-  const [showFilters, setShowFilters] = useState(false);
-  const [results, setResults] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [hasSearched, setHasSearched] = useState(false);
-  const [selectedCase, setSelectedCase] = useState(null);
-  const [dossiers, setDossiers] = useState([]);
-  const [activeTab, setActiveTab] = useState("results");
   const [addingTo, setAddingTo] = useState(null);
+
+  const handleTheme = (theme) => {
+    setQuery(theme);
+    performSearch(theme, filters);
+  };
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -115,7 +126,25 @@ export default function SearchPage() {
       </div>
 
       <div className="flex-1 overflow-y-auto">
-        <div className="max-w-4xl mx-auto p-6 space-y-6">
+        {/* Theme suggestions - shown when no search yet */}
+        {!hasSearched && !isLoading && (
+          <div className="max-w-4xl mx-auto px-6 pt-8 pb-0">
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-4">Thèmes fréquents</p>
+            <div className="flex flex-wrap gap-2 mb-6">
+              {themes.map(t => (
+                <button
+                  key={t.label}
+                  onClick={() => handleTheme(t.label)}
+                  className="flex items-center gap-2 px-4 py-2.5 bg-card border border-border rounded-xl text-sm text-foreground hover:bg-muted hover:border-foreground/20 transition-all card-shadow group"
+                >
+                  <span>{t.icon}</span>
+                  <span className="font-medium">{t.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
           {/* Search panel */}
           <div className="bg-card rounded-xl border border-border overflow-hidden">
             <div className="p-5 border-b border-border flex items-center justify-between">
