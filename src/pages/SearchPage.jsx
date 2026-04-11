@@ -34,7 +34,6 @@ export default function SearchPage() {
 
   const handleTheme = (theme) => {
     setQuery(theme);
-    performSearch(theme, filters);
   };
 
   useEffect(() => {
