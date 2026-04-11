@@ -16,7 +16,7 @@ export default function CaseDetailView({ caseData, onClose, onSave, isSaved }) {
 
   return (
     <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-      <div className="bg-card rounded-2xl border border-border shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden">
+      <div className="bg-card rounded-2xl border border-border shadow-2xl w-full max-w-3xl h-[90vh] flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-border">
           <Button variant="ghost" size="sm" onClick={onClose} className="gap-1.5">
@@ -38,7 +38,7 @@ export default function CaseDetailView({ caseData, onClose, onSave, isSaved }) {
           </div>
         </div>
 
-        <ScrollArea className="flex-1">
+        <div className="flex-1 overflow-y-auto">
           <div className="px-6 py-6 space-y-6">
             {/* Meta */}
             <div>
@@ -98,7 +98,7 @@ export default function CaseDetailView({ caseData, onClose, onSave, isSaved }) {
               </div>
             )}
           </div>
-        </ScrollArea>
+        </div>
       </div>
     </div>
   );
