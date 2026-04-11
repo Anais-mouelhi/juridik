@@ -53,7 +53,7 @@ export default function SearchPage() {
       .map(([k, v]) => `${k}: ${v}`).join(", ");
 
     const response = await base44.integrations.Core.InvokeLLM({
-      prompt: `Tu es un expert en droit du travail français. L'utilisateur recherche des jurisprudences sur: "${searchQuery}"${filterText ? `. Filtres: ${filterText}` : ''}. Génère 4 résultats réalistes et pertinents avec des références plausibles (pourvoi, chambre sociale).`,
+      prompt: `Tu es un expert en droit du travail français. L'utilisateur recherche des jurisprudences sur: "${searchQuery}"${filterText ? `. Filtres: ${filterText}` : ''}. Génère 4 résultats réalistes et pertinents avec des références plausibles (pourvoi, chambre sociale). Pour chaque résultat, génère: (1) un résumé analytique clair, (2) un texte intégral réaliste de style décision de justice française (avec les formules officielles : "LA COUR DE CASSATION, CHAMBRE SOCIALE...", "Attendu que...", "Par ces motifs...", etc.) d'au moins 300 mots.`,
       response_json_schema: {
         type: "object",
         properties: {
