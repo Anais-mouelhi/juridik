@@ -234,7 +234,8 @@ export default function SearchPage() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.07 }}
-                    className="p-5"
+                    className="p-5 cursor-pointer hover:bg-muted/30 transition-colors"
+                    onClick={() => setSelectedCase(result)}
                   >
                     <div className="mb-2">
                       <h3 className="text-sm font-semibold text-foreground leading-snug mb-1">{result.title}</h3>
