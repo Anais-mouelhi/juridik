@@ -31,9 +31,11 @@ export default function SearchPage() {
   const [dossiers, setDossiers] = useState([]);
   const [activeTab, setActiveTab] = useState("results");
   const [addingTo, setAddingTo] = useState(null);
+  const [searchVisible, setSearchVisible] = useState(false);
 
   const handleTheme = (theme) => {
     setQuery(theme);
+    setSearchVisible(true);
   };
 
   useEffect(() => {
@@ -107,7 +109,8 @@ export default function SearchPage() {
 
   return (
     <div className="flex flex-col h-full">
-      {/* Top bar */}
+      {/* Top bar - only shown when search is active */}
+      {searchVisible && (
       <div className="flex items-center gap-4 px-6 py-4 border-b border-border bg-background/80 backdrop-blur sticky top-0 z-10">
         <div>
           <p className="text-xs text-muted-foreground uppercase tracking-widest">Recherche</p>
@@ -132,28 +135,40 @@ export default function SearchPage() {
           Nouvelle recherche
         </button>
       </div>
+      )}
 
       <div className="flex-1 overflow-y-auto">
-        {/* Theme suggestions - shown when no search yet */}
-        {!hasSearched && !isLoading && (
-          <div className="max-w-4xl mx-auto px-6 pt-8 pb-0">
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-4">Thèmes fréquents</p>
-            <div className="flex flex-wrap gap-2 mb-6">
+        {/* Theme cards - shown when search not yet triggered */}
+        {!searchVisible && (
+          <div className="max-w-4xl mx-auto px-6 pt-10 pb-6">
+            <p className="text-xs font-medium text-muted-foreground uppercase tracking-widest mb-1">Recherche IA</p>
+            <h1 className="font-serif text-3xl font-semibold text-foreground mb-2">Jurisprudence droit du travail</h1>
+            <p className="text-sm text-muted-foreground mb-8">Choisissez un thème ou saisissez votre recherche librement.</p>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
               {themes.map(t => (
                 <button
                   key={t.label}
                   onClick={() => handleTheme(t.label)}
-                  className="flex items-center gap-2 px-4 py-2.5 bg-card border border-border rounded-xl text-sm text-foreground hover:bg-muted hover:border-foreground/20 transition-all card-shadow group"
+                  className="flex flex-col items-start gap-2 p-4 bg-card border border-border rounded-2xl text-left hover:bg-muted hover:border-foreground/20 transition-all card-shadow group"
                 >
-                  <span>{t.icon}</span>
-                  <span className="font-medium">{t.label}</span>
+                  <span className="text-2xl">{t.icon}</span>
+                  <span className="text-sm font-medium text-foreground leading-snug">{t.label}</span>
                 </button>
               ))}
             </div>
+            <button
+              onClick={() => setSearchVisible(true)}
+              className="mt-6 flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <Search className="h-4 w-4" />
+              Recherche libre
+            </button>
           </div>
         )}
 
-          {/* Search panel */}
+          {/* Search panel - shown when searchVisible */}
+          {searchVisible && (
+          <div className="max-w-4xl mx-auto px-6 py-6 space-y-4">
           <div className="bg-card rounded-xl border border-border overflow-hidden">
             <div className="p-5 border-b border-border flex items-center justify-between">
               <div>
@@ -172,6 +187,7 @@ export default function SearchPage() {
                     onKeyDown={e => e.key === 'Enter' && query.trim() && performSearch(query, filters)}
                     placeholder="Ex : faute grave et ancienneté du salarié..."
                     className="w-full bg-background border border-border rounded-lg px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50"
+                    autoFocus
                   />
                 </div>
                 <button
@@ -196,7 +212,6 @@ export default function SearchPage() {
           {/* Results */}
           {hasSearched && !isLoading && (
             <div className="bg-card rounded-xl border border-border overflow-hidden">
-              {/* Tabs */}
               <div className="flex items-center gap-6 px-5 py-3 border-b border-border">
                 {[
                   { id: "results", label: `Résultats (${results.length})` },
@@ -222,54 +237,38 @@ export default function SearchPage() {
                     className="p-5"
                   >
                     <div className="mb-2">
-                      <h3 className="text-sm font-semibold text-foreground leading-snug mb-1">
-                        {result.title}
-                      </h3>
-                      <p className="text-xs text-muted-foreground">
-                        {result.chamber} · {result.reference} · {result.source || 'Légifrance'}
-                      </p>
+                      <h3 className="text-sm font-semibold text-foreground leading-snug mb-1">{result.title}</h3>
+                      <p className="text-xs text-muted-foreground">{result.chamber} · {result.reference} · {result.source || 'Légifrance'}</p>
                     </div>
-                    <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-                      {result.summary}
-                    </p>
+                    <p className="text-sm text-muted-foreground leading-relaxed mb-4">{result.summary}</p>
                     <div className="flex flex-wrap gap-2">
-                      {/* Add to dossier */}
                       {addingTo === result.reference ? (
                         <div className="flex items-center gap-2 flex-wrap">
                           <span className="text-xs text-muted-foreground">Ajouter à :</span>
                           {dossiers.length === 0 ? (
                             <span className="text-xs text-muted-foreground">Aucun dossier</span>
                           ) : dossiers.map(d => (
-                            <button
-                              key={d.id}
-                              onClick={() => handleAddToDossier(result, d.id)}
-                              className="text-xs px-3 py-1.5 bg-primary/15 text-primary rounded-lg hover:bg-primary/25 transition-colors"
-                            >
+                            <button key={d.id} onClick={() => handleAddToDossier(result, d.id)}
+                              className="text-xs px-3 py-1.5 bg-primary/15 text-primary rounded-lg hover:bg-primary/25 transition-colors">
                               {d.title}
                             </button>
                           ))}
                           <button onClick={() => setAddingTo(null)} className="text-xs text-muted-foreground hover:text-foreground">Annuler</button>
                         </div>
                       ) : (
-                        <button
-                          onClick={() => setAddingTo(result.reference)}
-                          className="flex items-center gap-1.5 text-xs px-4 py-2 bg-card border border-border text-foreground rounded-lg hover:bg-muted transition-colors font-medium"
-                        >
+                        <button onClick={() => setAddingTo(result.reference)}
+                          className="flex items-center gap-1.5 text-xs px-4 py-2 bg-card border border-border text-foreground rounded-lg hover:bg-muted transition-colors font-medium">
                           <Plus className="h-3.5 w-3.5" />
                           Ajouter au dossier
                         </button>
                       )}
-                      <button
-                        onClick={() => setSelectedCase(result)}
-                        className="flex items-center gap-1.5 text-xs px-4 py-2 bg-card border border-border text-foreground rounded-lg hover:bg-muted transition-colors font-medium"
-                      >
+                      <button onClick={() => setSelectedCase(result)}
+                        className="flex items-center gap-1.5 text-xs px-4 py-2 bg-card border border-border text-foreground rounded-lg hover:bg-muted transition-colors font-medium">
                         <FileText className="h-3.5 w-3.5" />
                         Résumé complet
                       </button>
-                      <button
-                        onClick={() => exportPDF(result)}
-                        className="flex items-center gap-1.5 text-xs px-4 py-2 bg-card border border-border text-foreground rounded-lg hover:bg-muted transition-colors font-medium"
-                      >
+                      <button onClick={() => exportPDF(result)}
+                        className="flex items-center gap-1.5 text-xs px-4 py-2 bg-card border border-border text-foreground rounded-lg hover:bg-muted transition-colors font-medium">
                         <Download className="h-3.5 w-3.5" />
                         Export PDF
                       </button>
@@ -291,13 +290,13 @@ export default function SearchPage() {
           )}
 
           {!hasSearched && !isLoading && (
-            <div className="text-center py-20">
+            <div className="text-center py-16">
               <Search className="h-10 w-10 mx-auto text-muted-foreground/20 mb-4" />
-              <p className="text-foreground font-medium mb-1">Recherche jurisprudentielle IA</p>
-              <p className="text-sm text-muted-foreground max-w-sm mx-auto">
-                Décrivez votre situation juridique en langage naturel.
-              </p>
+              <p className="text-foreground font-medium mb-1">Décrivez votre situation</p>
+              <p className="text-sm text-muted-foreground max-w-sm mx-auto">Saisissez votre requête et lancez la recherche.</p>
             </div>
+          )}
+          </div>
           )}
         </div>
 
