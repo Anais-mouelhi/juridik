@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { Plus, FolderOpen, Trash2, X, CheckCircle, Scale } from "lucide-react";
+import CollaboratorsManager from "../components/dossiers/CollaboratorsManager";
 import { motion } from "framer-motion";
 
 const statusConfig = {
@@ -45,6 +46,10 @@ export default function DossiersPage() {
   const handleDelete = async (id) => {
     await base44.entities.Dossier.delete(id);
     setDossiers(prev => prev.filter(d => d.id !== id));
+  };
+
+  const handleDossierUpdate = (updated) => {
+    setDossiers(prev => prev.map(d => d.id === updated.id ? updated : d));
   };
 
   const filtered = filter === "all" ? dossiers : dossiers.filter(d => d.status === filter);
@@ -182,7 +187,8 @@ export default function DossiersPage() {
                 {d.type && <p className="text-[11px] text-muted-foreground/60 mt-1 italic">{d.type}</p>}
                 {d.description && <p className="text-xs text-muted-foreground/70 mt-2 line-clamp-2 leading-relaxed">{d.description}</p>}
 
-                <div className="flex items-center justify-between mt-auto pt-4 border-t border-border">
+                <CollaboratorsManager dossier={d} onUpdate={handleDossierUpdate} />
+                <div className="flex items-center justify-between mt-4 pt-4 border-t border-border">
                   <div className="flex items-center gap-1.5">
                     <Scale className="h-3 w-3 text-muted-foreground/50" />
                     <span className="text-xs text-muted-foreground">
