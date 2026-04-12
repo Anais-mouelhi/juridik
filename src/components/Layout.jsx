@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, Search, FolderOpen, CheckSquare, Calendar, User, Menu, Scale, LogOut } from "lucide-react";
+import { LayoutDashboard, Search, FolderOpen, CheckSquare, Calendar, User, Menu, Scale, LogOut, MailSearch } from "lucide-react";
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 
@@ -9,6 +9,7 @@ const sections = [
     items: [
       { path: "/", label: "Tableau de bord", icon: LayoutDashboard },
       { path: "/search", label: "Recherche IA", icon: Search },
+      { path: "/analyse-mails", label: "Analyse de mails", icon: MailSearch },
     ]
   },
   {

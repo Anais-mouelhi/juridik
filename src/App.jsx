@@ -12,6 +12,7 @@ import DossiersPage from './pages/DossiersPage';
 import TachesPage from './pages/TachesPage';
 import CalendrierPage from './pages/CalendrierPage';
 import ProfilPage from './pages/ProfilPage';
+import AnalyseMailsPage from './pages/AnalyseMailsPage';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -46,6 +47,7 @@ const AuthenticatedApp = () => {
         <Route path="/taches" element={<TachesPage />} />
         <Route path="/calendrier" element={<CalendrierPage />} />
         <Route path="/profil" element={<ProfilPage />} />
+        <Route path="/analyse-mails" element={<AnalyseMailsPage />} />
         <Route path="*" element={<PageNotFound />} />
       </Route>
     </Routes>
