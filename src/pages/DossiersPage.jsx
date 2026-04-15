@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { Plus, FolderOpen, Trash2, X, CheckCircle, Scale } from "lucide-react";
 import CollaboratorsManager from "../components/dossiers/CollaboratorsManager";
-import { motion } from "framer-motion";
+import DossierDetail from "../components/dossiers/DossierDetail";
+import { motion, AnimatePresence } from "framer-motion";
 
 const statusConfig = {
   urgent: { label: "Urgent", color: "bg-red-100 text-red-700 border-red-200", dot: "bg-red-500" },
@@ -24,6 +25,7 @@ export default function DossiersPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState("all");
   const [showForm, setShowForm] = useState(false);
+  const [selectedDossier, setSelectedDossier] = useState(null);
   const [form, setForm] = useState({ title: "", client: "", status: "en_cours", type: "", description: "", next_hearing: "" });
 
   useEffect(() => { loadDossiers(); }, []);
@@ -167,7 +169,8 @@ export default function DossiersPage() {
                 initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.35, delay: i * 0.06 }}
-                className="bg-card rounded-2xl border border-border p-5 hover:card-shadow-md card-shadow transition-shadow group flex flex-col"
+                onClick={() => setSelectedDossier(d)}
+                className="bg-card rounded-2xl border border-border p-5 hover:card-shadow-md card-shadow transition-shadow group flex flex-col cursor-pointer hover:border-foreground/20"
               >
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-2">
@@ -176,7 +179,7 @@ export default function DossiersPage() {
                       {sc.label}
                     </span>
                   </div>
-                  <button onClick={() => handleDelete(d.id)}
+                  <button onClick={e => { e.stopPropagation(); handleDelete(d.id); }}
                     className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive transition-all p-1 rounded-lg hover:bg-red-50">
                     <Trash2 className="h-3.5 w-3.5" />
                   </button>
@@ -187,7 +190,9 @@ export default function DossiersPage() {
                 {d.type && <p className="text-[11px] text-muted-foreground/60 mt-1 italic">{d.type}</p>}
                 {d.description && <p className="text-xs text-muted-foreground/70 mt-2 line-clamp-2 leading-relaxed">{d.description}</p>}
 
-                <CollaboratorsManager dossier={d} onUpdate={handleDossierUpdate} />
+                <div onClick={e => e.stopPropagation()}>
+                  <CollaboratorsManager dossier={d} onUpdate={handleDossierUpdate} />
+                </div>
                 <div className="flex items-center justify-between mt-4 pt-4 border-t border-border">
                   <div className="flex items-center gap-1.5">
                     <Scale className="h-3 w-3 text-muted-foreground/50" />
@@ -204,6 +209,16 @@ export default function DossiersPage() {
           })}
         </div>
       )}
+      <AnimatePresence>
+        {selectedDossier && (
+          <DossierDetail
+            dossier={selectedDossier}
+            onClose={() => setSelectedDossier(null)}
+            onUpdate={(updated) => { handleDossierUpdate(updated); setSelectedDossier(updated); }}
+            onDelete={handleDelete}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
