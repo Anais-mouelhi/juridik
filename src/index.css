@@ -8,51 +8,50 @@
   :root {
     --font-sans: 'Plus Jakarta Sans', sans-serif;
 
-    /* Encre (deep ink near-black) + Or (gold) */
-    --background: 220 14% 96%;
-    --foreground: 222 28% 8%;
+    /* Encre + Or — fidèle au screenshot */
+    --background: 0 0% 96%;
+    --foreground: 222 25% 10%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222 28% 8%;
+    --card-foreground: 222 25% 10%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 28% 8%;
+    --popover-foreground: 222 25% 10%;
 
-    /* Encre foncée */
-    --primary: 222 28% 10%;
-    --primary-foreground: 0 0% 98%;
+    --primary: 222 25% 10%;
+    --primary-foreground: 0 0% 100%;
 
-    /* Or */
-    --gold: 42 85% 52%;
-    --gold-light: 42 85% 95%;
-    --gold-foreground: 222 28% 8%;
+    --gold: 42 90% 50%;
+    --gold-light: 42 90% 96%;
+    --gold-foreground: 222 25% 10%;
 
-    --secondary: 220 12% 92%;
-    --secondary-foreground: 222 20% 30%;
+    --secondary: 220 10% 94%;
+    --secondary-foreground: 222 15% 35%;
 
-    --muted: 220 12% 93%;
-    --muted-foreground: 220 10% 52%;
+    --muted: 220 10% 94%;
+    --muted-foreground: 220 8% 55%;
 
-    --accent: 42 85% 52%;
-    --accent-foreground: 222 28% 8%;
+    --accent: 42 90% 50%;
+    --accent-foreground: 222 25% 10%;
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 220 14% 88%;
-    --input: 220 14% 88%;
-    --ring: 42 85% 52%;
+    --border: 220 10% 90%;
+    --input: 220 10% 90%;
+    --ring: 42 90% 50%;
 
-    --radius: 0.75rem;
+    --radius: 0.625rem;
 
-    --sidebar-background: 222 28% 10%;
-    --sidebar-foreground: 220 10% 60%;
-    --sidebar-primary: 42 85% 52%;
-    --sidebar-primary-foreground: 222 28% 8%;
-    --sidebar-accent: 222 24% 16%;
-    --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 222 24% 16%;
-    --sidebar-ring: 42 85% 52%;
+    /* Sidebar : blanc/gris très clair comme dans le screenshot */
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 220 8% 52%;
+    --sidebar-primary: 42 90% 50%;
+    --sidebar-primary-foreground: 222 25% 10%;
+    --sidebar-accent: 220 10% 94%;
+    --sidebar-accent-foreground: 222 25% 10%;
+    --sidebar-border: 220 10% 90%;
+    --sidebar-ring: 42 90% 50%;
   }
 }
 
@@ -65,12 +64,12 @@
   }
 }
 
-/* Card shadows — encre palette */
+/* Card shadows — légers comme dans le screenshot */
 .card-shadow {
-  box-shadow: 0 1px 3px 0 rgba(10, 15, 30, 0.07), 0 1px 2px -1px rgba(10, 15, 30, 0.04);
+  box-shadow: 0 1px 4px 0 rgba(10, 14, 30, 0.06);
 }
 .card-shadow-md {
-  box-shadow: 0 4px 20px 0 rgba(10, 15, 30, 0.10), 0 1px 4px -1px rgba(10, 15, 30, 0.05);
+  box-shadow: 0 4px 16px 0 rgba(10, 14, 30, 0.09);
 }
 
 /* Gold accent utilities */
