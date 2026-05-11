@@ -72,6 +72,10 @@
   box-shadow: 0 4px 16px 0 rgba(10, 14, 30, 0.09);
 }
 
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 /* Gold accent utilities */
 .gold-dot {
   background: hsl(42 85% 52%);

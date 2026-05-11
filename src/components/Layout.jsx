@@ -1,7 +1,7 @@
 import { Outlet, Link, useLocation } from "react-router-dom";
 import {
   LayoutDashboard, Search, FolderOpen, CheckSquare, Calendar,
-  User, Scale, LogOut, MailSearch, Bell, Menu, X, Command
+  Scale, LogOut, MailSearch, Bell, Menu, X
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
@@ -28,137 +28,189 @@ export default function Layout() {
     ?.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase() || "?";
 
   return (
-    <div className="flex h-screen overflow-hidden bg-background">
+    <div style={{ display: "flex", width: "100vw", height: "100vh", overflow: "hidden", background: "hsl(0,0%,96%)" }}>
 
-      {/* ── Slim white sidebar (desktop) ──────────────────────────── */}
-      <aside className="hidden lg:flex flex-col items-center w-[58px] bg-white border-r border-[hsl(220,10%,90%)] py-3 gap-0.5 z-30 flex-shrink-0">
+      {/* ── Slim sidebar ── */}
+      <aside style={{
+        width: 58, minWidth: 58, height: "100vh",
+        background: "#fff",
+        borderRight: "1px solid hsl(220,10%,90%)",
+        display: "flex", flexDirection: "column", alignItems: "center",
+        paddingTop: 12, paddingBottom: 12, gap: 2, zIndex: 30, flexShrink: 0
+      }}>
         {/* Logo */}
-        <Link to="/" className="mb-4 flex items-center justify-center h-9 w-9 rounded-xl bg-[hsl(222,25%,10%)]">
-          <Scale className="h-4 w-4 text-white" />
+        <Link to="/" style={{
+          display: "flex", alignItems: "center", justifyContent: "center",
+          width: 36, height: 36, borderRadius: 10, background: "hsl(222,25%,10%)", marginBottom: 12
+        }}>
+          <Scale size={16} color="#fff" />
         </Link>
 
-        {/* Nav icons */}
-        <nav className="flex flex-col gap-0.5 flex-1 w-full px-2">
+        {/* Nav */}
+        <nav style={{ display: "flex", flexDirection: "column", gap: 2, flex: 1, width: "100%", padding: "0 8px" }}>
           {navItems.map(item => {
             const isActive = location.pathname === item.path;
             return (
-              <Link
-                key={item.path}
-                to={item.path}
-                title={item.label}
-                className={`relative group flex items-center justify-center h-9 w-9 rounded-xl mx-auto transition-all duration-150
-                  ${isActive
-                    ? "bg-[hsl(222,25%,10%)] text-white"
-                    : "text-[hsl(220,8%,55%)] hover:bg-[hsl(220,10%,94%)] hover:text-[hsl(222,25%,10%)]"
-                  }`}
-              >
-                <item.icon className="h-[18px] w-[18px]" />
+              <div key={item.path} style={{ position: "relative" }} className="group">
+                <Link to={item.path} style={{
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  width: 40, height: 40, borderRadius: 10, margin: "0 auto",
+                  background: isActive ? "hsl(222,25%,10%)" : "transparent",
+                  color: isActive ? "#fff" : "hsl(220,8%,55%)",
+                  transition: "all 0.15s",
+                  textDecoration: "none"
+                }}
+                  onMouseEnter={e => { if (!isActive) { e.currentTarget.style.background = "hsl(220,10%,94%)"; e.currentTarget.style.color = "hsl(222,25%,10%)"; }}}
+                  onMouseLeave={e => { if (!isActive) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "hsl(220,8%,55%)"; }}}
+                >
+                  <item.icon size={18} />
+                </Link>
                 {/* Tooltip */}
-                <span className="pointer-events-none absolute left-full ml-3 whitespace-nowrap rounded-lg bg-[hsl(222,25%,10%)] px-3 py-1.5 text-xs font-semibold text-white opacity-0 group-hover:opacity-100 transition-opacity z-50 shadow-lg">
+                <div style={{
+                  position: "absolute", left: "calc(100% + 10px)", top: "50%", transform: "translateY(-50%)",
+                  background: "hsl(222,25%,10%)", color: "#fff", fontSize: 12, fontWeight: 600,
+                  padding: "6px 12px", borderRadius: 8, whiteSpace: "nowrap",
+                  pointerEvents: "none", opacity: 0, transition: "opacity 0.15s", zIndex: 100,
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.15)"
+                }} className="group-hover-tooltip">
                   {item.label}
-                </span>
-              </Link>
+                </div>
+              </div>
             );
           })}
         </nav>
 
-        {/* Bottom */}
-        <div className="flex flex-col items-center gap-0.5 mt-auto w-full px-2">
-          <Link
-            to="/profil"
-            title={user?.full_name || "Profil"}
-            className="flex items-center justify-center h-9 w-9 rounded-full bg-[hsl(42,90%,50%)] text-[hsl(222,25%,10%)] text-xs font-bold hover:brightness-105 transition-all"
-          >
+        {/* Avatar bottom */}
+        <div style={{ marginTop: "auto", padding: "0 8px" }}>
+          <Link to="/profil" style={{
+            display: "flex", alignItems: "center", justifyContent: "center",
+            width: 36, height: 36, borderRadius: "50%",
+            background: "hsl(42,90%,50%)", color: "hsl(222,25%,10%)",
+            fontSize: 12, fontWeight: 700, textDecoration: "none"
+          }}>
             {initials}
           </Link>
         </div>
       </aside>
 
-      {/* ── Mobile overlay sidebar ─────────────────────────────────── */}
+      {/* ── Right side: topbar + content ── */}
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden", minWidth: 0 }}>
+
+        {/* Topbar */}
+        <header style={{
+          height: 52, minHeight: 52,
+          background: "#fff",
+          borderBottom: "1px solid hsl(220,10%,90%)",
+          display: "flex", alignItems: "center", gap: 12,
+          padding: "0 20px", flexShrink: 0, zIndex: 20
+        }}>
+          {/* Mobile menu btn */}
+          <button onClick={() => setMobileOpen(true)} style={{ display: "none" }}>
+            <Menu size={18} />
+          </button>
+
+          {/* Search bar */}
+          <div style={{
+            display: "flex", alignItems: "center", gap: 8,
+            background: "hsl(220,10%,97%)", border: "1px solid hsl(220,10%,90%)",
+            borderRadius: 8, padding: "6px 12px", width: 220, flexShrink: 0
+          }}>
+            <Search size={13} color="hsl(220,8%,55%)" />
+            <span style={{ fontSize: 13, color: "hsl(220,8%,60%)", flex: 1 }}>Rechercher…</span>
+            <div style={{ display: "flex", gap: 2 }}>
+              <kbd style={{ fontSize: 10, background: "#fff", border: "1px solid hsl(220,10%,88%)", borderRadius: 4, padding: "1px 4px", color: "hsl(220,8%,55%)", fontFamily: "monospace" }}>⌘</kbd>
+              <kbd style={{ fontSize: 10, background: "#fff", border: "1px solid hsl(220,10%,88%)", borderRadius: 4, padding: "1px 4px", color: "hsl(220,8%,55%)", fontFamily: "monospace" }}>K</kbd>
+            </div>
+          </div>
+
+          {/* Green badge */}
+          <div style={{
+            display: "flex", alignItems: "center", gap: 6,
+            background: "hsl(142,60%,95%)", border: "1px solid hsl(142,60%,80%)",
+            color: "hsl(142,60%,30%)", borderRadius: 999, padding: "5px 12px",
+            fontSize: 12, fontWeight: 500, flexShrink: 0
+          }}>
+            <span style={{ width: 6, height: 6, borderRadius: "50%", background: "hsl(142,60%,45%)", flexShrink: 0 }} />
+            Anonymisation locale active
+          </div>
+
+          <div style={{ flex: 1 }} />
+
+          {/* Bell */}
+          <button style={{
+            width: 34, height: 34, borderRadius: 8, border: "1px solid hsl(220,10%,90%)",
+            background: "#fff", display: "flex", alignItems: "center", justifyContent: "center",
+            cursor: "pointer", color: "hsl(220,8%,55%)"
+          }}>
+            <Bell size={15} />
+          </button>
+
+          {/* Avatar */}
+          <Link to="/profil" style={{
+            width: 32, height: 32, borderRadius: "50%",
+            background: "hsl(222,25%,10%)", color: "#fff",
+            fontSize: 12, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center",
+            textDecoration: "none"
+          }}>
+            {initials}
+          </Link>
+        </header>
+
+        {/* Page content — fills remaining height */}
+        <div style={{ flex: 1, overflowY: "auto", overflowX: "hidden" }}>
+          <Outlet />
+        </div>
+      </div>
+
+      {/* Mobile overlay */}
       {mobileOpen && (
-        <div className="fixed inset-0 z-50 flex lg:hidden">
-          <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" onClick={() => setMobileOpen(false)} />
-          <aside className="relative z-10 w-60 bg-white h-full flex flex-col py-5 px-4 border-r border-border">
-            <div className="flex items-center justify-between mb-8">
-              <div className="flex items-center gap-2.5">
-                <div className="h-8 w-8 rounded-xl bg-[hsl(222,25%,10%)] flex items-center justify-center">
-                  <Scale className="h-4 w-4 text-white" />
+        <div style={{ position: "fixed", inset: 0, zIndex: 50, display: "flex" }}>
+          <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.3)" }} onClick={() => setMobileOpen(false)} />
+          <aside style={{
+            position: "relative", zIndex: 10, width: 220, background: "#fff",
+            height: "100%", display: "flex", flexDirection: "column", padding: "20px 16px",
+            borderRight: "1px solid hsl(220,10%,90%)"
+          }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <div style={{ width: 32, height: 32, borderRadius: 8, background: "hsl(222,25%,10%)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <Scale size={15} color="#fff" />
                 </div>
-                <span className="text-sm font-bold text-foreground">JurisIA</span>
+                <span style={{ fontSize: 14, fontWeight: 700, color: "hsl(222,25%,10%)" }}>JurisIA</span>
               </div>
-              <button onClick={() => setMobileOpen(false)} className="text-muted-foreground hover:text-foreground transition-colors">
-                <X className="h-4 w-4" />
+              <button onClick={() => setMobileOpen(false)} style={{ color: "hsl(220,8%,55%)", background: "none", border: "none", cursor: "pointer" }}>
+                <X size={16} />
               </button>
             </div>
-            <nav className="flex flex-col gap-0.5">
+            <nav style={{ display: "flex", flexDirection: "column", gap: 2 }}>
               {navItems.map(item => {
                 const isActive = location.pathname === item.path;
                 return (
-                  <Link key={item.path} to={item.path} onClick={() => setMobileOpen(false)}
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all
-                      ${isActive ? "bg-[hsl(222,25%,10%)] text-white" : "text-muted-foreground hover:bg-muted hover:text-foreground"}`}
-                  >
-                    <item.icon className="h-4 w-4 flex-shrink-0" />
+                  <Link key={item.path} to={item.path} onClick={() => setMobileOpen(false)} style={{
+                    display: "flex", alignItems: "center", gap: 10,
+                    padding: "9px 12px", borderRadius: 10, fontSize: 13, fontWeight: 500,
+                    background: isActive ? "hsl(222,25%,10%)" : "transparent",
+                    color: isActive ? "#fff" : "hsl(220,8%,55%)", textDecoration: "none"
+                  }}>
+                    <item.icon size={16} />
                     {item.label}
                   </Link>
                 );
               })}
             </nav>
-            <div className="mt-auto pt-4 border-t border-border">
-              <button onClick={() => base44.auth.logout()}
-                className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-muted-foreground hover:text-foreground hover:bg-muted w-full transition-colors">
-                <LogOut className="h-4 w-4" />
+            <div style={{ marginTop: "auto", paddingTop: 16, borderTop: "1px solid hsl(220,10%,90%)" }}>
+              <button onClick={() => base44.auth.logout()} style={{
+                display: "flex", alignItems: "center", gap: 10,
+                padding: "9px 12px", borderRadius: 10, fontSize: 13, width: "100%",
+                color: "hsl(220,8%,55%)", background: "none", border: "none", cursor: "pointer"
+              }}>
+                <LogOut size={16} />
                 Déconnexion
               </button>
             </div>
           </aside>
         </div>
       )}
-
-      {/* ── Main column ───────────────────────────────────────────── */}
-      <main className="flex-1 flex flex-col overflow-hidden min-w-0">
-
-        {/* ── Topbar ────────────────────────────────────────────── */}
-        <header className="flex items-center gap-3 px-5 py-2.5 bg-white border-b border-[hsl(220,10%,90%)] flex-shrink-0 z-20">
-          {/* Mobile menu */}
-          <button onClick={() => setMobileOpen(true)} className="lg:hidden text-muted-foreground hover:text-foreground transition-colors mr-1">
-            <Menu className="h-5 w-5" />
-          </button>
-
-          {/* Search */}
-          <div className="flex items-center gap-2 bg-[hsl(220,10%,96%)] border border-border rounded-lg px-3 py-1.5 flex-1 max-w-xs">
-            <Search className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
-            <span className="text-sm text-muted-foreground">Rechercher…</span>
-            <div className="ml-auto flex items-center gap-1 flex-shrink-0">
-              <kbd className="text-[10px] text-muted-foreground bg-white border border-border rounded px-1.5 py-0.5 font-mono">⌘</kbd>
-              <kbd className="text-[10px] text-muted-foreground bg-white border border-border rounded px-1.5 py-0.5 font-mono">K</kbd>
-            </div>
-          </div>
-
-          {/* Anonymisation badge */}
-          <div className="hidden sm:flex items-center gap-1.5 bg-green-50 border border-green-200 text-green-700 rounded-full px-3 py-1.5 text-xs font-medium flex-shrink-0">
-            <span className="h-1.5 w-1.5 rounded-full bg-green-500 flex-shrink-0" />
-            Anonymisation locale active
-          </div>
-
-          <div className="flex-1" />
-
-          {/* Bell */}
-          <button className="flex items-center justify-center h-8 w-8 rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground transition-colors flex-shrink-0">
-            <Bell className="h-4 w-4" />
-          </button>
-
-          {/* Avatar */}
-          <Link to="/profil" className="flex items-center justify-center h-8 w-8 rounded-full bg-[hsl(222,25%,10%)] text-white text-xs font-bold hover:opacity-90 transition-opacity flex-shrink-0">
-            {initials}
-          </Link>
-        </header>
-
-        {/* Page content */}
-        <div className="flex-1 overflow-y-auto bg-[hsl(0,0%,96%)]">
-          <Outlet />
-        </div>
-      </main>
     </div>
   );
 }
