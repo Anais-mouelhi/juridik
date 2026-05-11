@@ -6,7 +6,7 @@ module.exports = {
   	extend: {
       fontFamily: {
         sans: ['var(--font-sans)'],
-        serif: ['var(--font-serif)'],
+        serif: ['var(--font-sans)'],
       },
   		borderRadius: {
   			lg: 'var(--radius)',
@@ -57,6 +57,11 @@ module.exports = {
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
   			},
+        gold: {
+          DEFAULT: 'hsl(42 85% 52%)',
+          light: 'hsl(42 85% 95%)',
+          foreground: 'hsl(222 28% 8%)',
+        },
   			sidebar: {
   				DEFAULT: 'hsl(var(--sidebar-background))',
   				foreground: 'hsl(var(--sidebar-foreground))',

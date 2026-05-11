@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,47 +6,53 @@
 
 @layer base {
   :root {
-    --font-sans: 'Inter', sans-serif;
-    --font-serif: 'Fraunces', serif;
+    --font-sans: 'Plus Jakarta Sans', sans-serif;
 
-    --background: 38 28% 91%;
-    --foreground: 25 35% 10%;
+    /* Encre (deep ink near-black) + Or (gold) */
+    --background: 220 14% 96%;
+    --foreground: 222 28% 8%;
 
-    --card: 38 35% 98%;
-    --card-foreground: 25 35% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 28% 8%;
 
-    --popover: 38 35% 98%;
-    --popover-foreground: 25 35% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 28% 8%;
 
-    --primary: 24 38% 13%;
-    --primary-foreground: 38 28% 92%;
+    /* Encre foncée */
+    --primary: 222 28% 10%;
+    --primary-foreground: 0 0% 98%;
 
-    --secondary: 250 18% 70%;
-    --secondary-foreground: 25 35% 10%;
+    /* Or */
+    --gold: 42 85% 52%;
+    --gold-light: 42 85% 95%;
+    --gold-foreground: 222 28% 8%;
 
-    --muted: 36 22% 86%;
-    --muted-foreground: 25 12% 48%;
+    --secondary: 220 12% 92%;
+    --secondary-foreground: 222 20% 30%;
 
-    --accent: 36 38% 80%;
-    --accent-foreground: 25 35% 10%;
+    --muted: 220 12% 93%;
+    --muted-foreground: 220 10% 52%;
 
-    --destructive: 0 70% 50%;
+    --accent: 42 85% 52%;
+    --accent-foreground: 222 28% 8%;
+
+    --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 36 18% 82%;
-    --input: 36 18% 82%;
-    --ring: 24 38% 13%;
+    --border: 220 14% 88%;
+    --input: 220 14% 88%;
+    --ring: 42 85% 52%;
 
-    --radius: 0.875rem;
+    --radius: 0.75rem;
 
-    --sidebar-background: 36 22% 87%;
-    --sidebar-foreground: 25 12% 42%;
-    --sidebar-primary: 24 38% 13%;
-    --sidebar-primary-foreground: 38 28% 92%;
-    --sidebar-accent: 36 28% 93%;
-    --sidebar-accent-foreground: 25 35% 10%;
-    --sidebar-border: 36 18% 80%;
-    --sidebar-ring: 24 38% 13%;
+    --sidebar-background: 222 28% 10%;
+    --sidebar-foreground: 220 10% 60%;
+    --sidebar-primary: 42 85% 52%;
+    --sidebar-primary-foreground: 222 28% 8%;
+    --sidebar-accent: 222 24% 16%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 222 24% 16%;
+    --sidebar-ring: 42 85% 52%;
   }
 }
 
@@ -59,12 +65,27 @@
   }
 }
 
-.font-serif { font-family: var(--font-serif); }
-
-/* Refined card shadow */
+/* Card shadows — encre palette */
 .card-shadow {
-  box-shadow: 0 1px 3px 0 rgba(60, 40, 20, 0.06), 0 1px 2px -1px rgba(60, 40, 20, 0.04);
+  box-shadow: 0 1px 3px 0 rgba(10, 15, 30, 0.07), 0 1px 2px -1px rgba(10, 15, 30, 0.04);
 }
 .card-shadow-md {
-  box-shadow: 0 4px 16px 0 rgba(60, 40, 20, 0.08), 0 1px 4px -1px rgba(60, 40, 20, 0.05);
+  box-shadow: 0 4px 20px 0 rgba(10, 15, 30, 0.10), 0 1px 4px -1px rgba(10, 15, 30, 0.05);
+}
+
+/* Gold accent utilities */
+.gold-dot {
+  background: hsl(42 85% 52%);
+}
+.border-gold {
+  border-color: hsl(42 85% 52%);
+}
+.text-gold {
+  color: hsl(42 85% 52%);
+}
+.bg-gold {
+  background: hsl(42 85% 52%);
+}
+.bg-gold-light {
+  background: hsl(42 85% 95%);
 }
