@@ -22,12 +22,12 @@ const INK = "#1A1A1A";
 const SUB = "#666";
 const LINE = "rgba(0,0,0,0.06)";
 const glass = {
-  background: "rgba(255,255,255,0.65)",
-  backdropFilter: "blur(18px)",
-  WebkitBackdropFilter: "blur(18px)",
-  border: "1px solid rgba(255,255,255,0.9)",
+  background: "rgba(255,255,255,0.5)",
+  backdropFilter: "blur(22px) saturate(160%)",
+  WebkitBackdropFilter: "blur(22px) saturate(160%)",
+  border: "1px solid rgba(255,255,255,0.85)",
   borderRadius: 28,
-  boxShadow: "0 20px 50px -12px rgba(120,100,200,0.18), 0 2px 8px rgba(0,0,0,0.03)",
+  boxShadow: "0 20px 50px -12px rgba(120,100,200,0.22), inset 0 1px 0 0 rgba(255,255,255,0.6)",
 };
 
 export default function Dashboard() {
