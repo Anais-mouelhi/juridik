@@ -58,9 +58,9 @@ module.exports = {
   				'5': 'hsl(var(--chart-5))'
   			},
         gold: {
-          DEFAULT: 'hsl(42 85% 52%)',
-          light: 'hsl(42 85% 95%)',
-          foreground: 'hsl(222 28% 8%)',
+          DEFAULT: 'hsl(244 100% 31%)',
+          light: 'hsl(244 100% 96%)',
+          foreground: 'hsl(0 0% 100%)',
         },
   			sidebar: {
   				DEFAULT: 'hsl(var(--sidebar-background))',

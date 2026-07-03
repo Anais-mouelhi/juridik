@@ -37,7 +37,7 @@ export default function Dashboard() {
 
   if (isLoading) return (
     <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", background: "hsl(0,0%,96%)" }}>
-      <div style={{ width: 20, height: 20, border: "2px solid hsl(220,10%,88%)", borderTop: "2px solid hsl(222,25%,10%)", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
+      <div style={{ width: 20, height: 20, border: "2px solid hsl(220,10%,88%)", borderTop: "2px solid #0A00A0", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
     </div>
   );
 
@@ -61,7 +61,7 @@ export default function Dashboard() {
           <p style={{ fontSize: 11, fontWeight: 700, color: "hsl(220,8%,60%)", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 4 }}>
             {new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
           </p>
-          <h1 style={{ fontSize: 26, fontWeight: 800, color: "hsl(222,25%,10%)", margin: 0, letterSpacing: "-0.5px" }}>
+          <h1 style={{ fontSize: 26, fontWeight: 800, color: "#0A00A0", margin: 0, letterSpacing: "-0.5px" }}>
             {greeting}, {firstName} 👋
           </h1>
           <p style={{ fontSize: 13, color: "hsl(220,8%,55%)", marginTop: 4 }}>
@@ -73,7 +73,7 @@ export default function Dashboard() {
         </div>
         <Link to="/search" style={{
           display: "flex", alignItems: "center", gap: 8,
-          background: "hsl(222,25%,10%)", color: "#fff",
+          background: "#0A00A0", color: "#fff",
           borderRadius: 10, padding: "10px 18px", fontSize: 13, fontWeight: 600,
           textDecoration: "none", flexShrink: 0
         }}>
@@ -93,7 +93,7 @@ export default function Dashboard() {
           <motion.div key={s.label} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.05 + i * 0.07 }}>
             <Link to={s.href} style={{ textDecoration: "none" }}>
               <div style={{
-                background: s.accent ? "hsl(222,25%,10%)" : "#fff",
+                background: s.accent ? "#0A00A0" : "#fff",
                 border: `1px solid ${s.accent ? "transparent" : "hsl(220,10%,90%)"}`,
                 borderRadius: 14, padding: "18px 20px",
                 boxShadow: "0 1px 4px rgba(10,14,30,0.06)",
@@ -109,8 +109,8 @@ export default function Dashboard() {
                   </div>
                   <ArrowUpRight size={13} color={s.accent ? "rgba(255,255,255,0.3)" : "hsl(220,10%,86%)"} />
                 </div>
-                <p style={{ fontSize: 28, fontWeight: 800, color: s.accent ? "#fff" : "hsl(222,25%,10%)", margin: 0, lineHeight: 1 }}>{s.value}</p>
-                <p style={{ fontSize: 12, fontWeight: 600, color: s.accent ? "rgba(255,255,255,0.8)" : "hsl(222,25%,10%)", marginTop: 5 }}>{s.label}</p>
+                <p style={{ fontSize: 28, fontWeight: 800, color: s.accent ? "#fff" : "#0A00A0", margin: 0, lineHeight: 1 }}>{s.value}</p>
+                <p style={{ fontSize: 12, fontWeight: 600, color: s.accent ? "rgba(255,255,255,0.8)" : "#0A00A0", marginTop: 5 }}>{s.label}</p>
                 <p style={{ fontSize: 11, color: s.accent ? "rgba(255,255,255,0.45)" : "hsl(220,8%,60%)", marginTop: 2 }}>{s.sub}</p>
               </div>
             </Link>
@@ -131,9 +131,9 @@ export default function Dashboard() {
               {/* Recherche — dark card */}
               <Link to="/search" style={{ textDecoration: "none" }}>
                 <div style={{
-                  background: "linear-gradient(135deg, hsl(222,25%,12%) 0%, hsl(222,35%,18%) 100%)",
+                  background: "linear-gradient(135deg, #0A00A0 0%, #000000 100%)",
                   borderRadius: 14, padding: "20px", boxShadow: "0 4px 16px rgba(10,14,30,0.12)", cursor: "pointer",
-                  border: "1px solid hsl(222,25%,20%)"
+                  border: "1px solid #000000"
                 }}>
                   <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 20 }}>
                     <div style={{ width: 36, height: 36, borderRadius: 9, background: "rgba(255,255,255,0.1)", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -158,7 +158,7 @@ export default function Dashboard() {
                     </div>
                     <ArrowUpRight size={13} color="hsl(220,10%,80%)" />
                   </div>
-                  <p style={{ fontSize: 13, fontWeight: 700, color: "hsl(222,25%,10%)", marginBottom: 3 }}>Analyse de mails</p>
+                  <p style={{ fontSize: 13, fontWeight: 700, color: "#0A00A0", marginBottom: 3 }}>Analyse de mails</p>
                   <p style={{ fontSize: 11, color: "hsl(220,8%,60%)" }}>Anonymisation RGPD</p>
                 </div>
               </Link>
@@ -175,7 +175,7 @@ export default function Dashboard() {
                     </div>
                     <ArrowUpRight size={13} color="hsl(220,10%,80%)" />
                   </div>
-                  <p style={{ fontSize: 13, fontWeight: 700, color: "hsl(222,25%,10%)", marginBottom: 3 }}>Mes dossiers</p>
+                  <p style={{ fontSize: 13, fontWeight: 700, color: "#0A00A0", marginBottom: 3 }}>Mes dossiers</p>
                   <p style={{ fontSize: 11, color: "hsl(220,8%,60%)" }}>{dossiers.length} dossier{dossiers.length!==1?'s':''}</p>
                 </div>
               </Link>
@@ -188,7 +188,7 @@ export default function Dashboard() {
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 20px", borderBottom: "1px solid hsl(220,10%,92%)" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <FolderOpen size={14} color="hsl(220,8%,55%)" />
-                  <span style={{ fontSize: 13, fontWeight: 700, color: "hsl(222,25%,10%)" }}>Dossiers récents</span>
+                  <span style={{ fontSize: 13, fontWeight: 700, color: "#0A00A0" }}>Dossiers récents</span>
                 </div>
                 <Link to="/dossiers" style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 12, color: "hsl(220,8%,60%)", textDecoration: "none" }}>
                   Voir tout <ArrowRight size={12} />
@@ -198,7 +198,7 @@ export default function Dashboard() {
                 <div style={{ padding: "32px 20px", textAlign: "center" }}>
                   <FolderOpen size={28} color="hsl(220,10%,85%)" style={{ margin: "0 auto 8px" }} />
                   <p style={{ fontSize: 13, color: "hsl(220,8%,60%)" }}>Aucun dossier</p>
-                  <Link to="/dossiers" style={{ fontSize: 12, color: "hsl(42,90%,45%)", fontWeight: 600 }}>Créer un dossier →</Link>
+                  <Link to="/dossiers" style={{ fontSize: 12, color: "#0A00A0", fontWeight: 600 }}>Créer un dossier →</Link>
                 </div>
               ) : recentDossiers.map((d, i) => {
                 const sc = statusConfig[d.status] || statusConfig.en_cours;
@@ -212,7 +212,7 @@ export default function Dashboard() {
                       <div style={{ width: 6, height: 6, borderRadius: "50%", background: d.status === 'urgent' ? "#ef4444" : d.status === 'en_cours' ? "#f59e0b" : d.status === 'stable' ? "#22c55e" : "#9ca3af" }} />
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <p style={{ fontSize: 13, fontWeight: 600, color: "hsl(222,25%,10%)", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{d.title}</p>
+                      <p style={{ fontSize: 13, fontWeight: 600, color: "#0A00A0", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{d.title}</p>
                       <p style={{ fontSize: 11, color: "hsl(220,8%,60%)", margin: "1px 0 0" }}>{d.client}{d.type ? ` · ${d.type}` : ''}</p>
                     </div>
                     <span style={{
@@ -234,7 +234,7 @@ export default function Dashboard() {
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 20px", borderBottom: "1px solid hsl(220,10%,92%)" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                     <BookOpen size={14} color="hsl(220,8%,55%)" />
-                    <span style={{ fontSize: 13, fontWeight: 700, color: "hsl(222,25%,10%)" }}>Recherches récentes</span>
+                    <span style={{ fontSize: 13, fontWeight: 700, color: "#0A00A0" }}>Recherches récentes</span>
                   </div>
                   <Link to="/search" style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 12, color: "hsl(220,8%,60%)", textDecoration: "none" }}>
                     Voir tout <ArrowRight size={12} />
@@ -250,7 +250,7 @@ export default function Dashboard() {
                         <div style={{ width: 28, height: 28, borderRadius: 7, background: "hsl(220,10%,97%)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                           <Search size={12} color="hsl(220,8%,55%)" />
                         </div>
-                        <p style={{ fontSize: 13, color: "hsl(222,25%,10%)", flex: 1, margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{s.query}</p>
+                        <p style={{ fontSize: 13, color: "#0A00A0", flex: 1, margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{s.query}</p>
                         {s.results_count !== undefined && (
                           <span style={{ fontSize: 11, color: "hsl(220,8%,60%)", flexShrink: 0 }}>{s.results_count} résultats</span>
                         )}
@@ -286,19 +286,19 @@ export default function Dashboard() {
               return (
                 <div key={d.id} style={{
                   display: "flex", alignItems: "center", gap: 12, padding: "12px 18px",
-                  background: isFirst ? "hsl(222,25%,10%)" : "#fff",
-                  borderBottom: i < upcoming.length - 1 ? `1px solid ${isFirst ? "hsl(222,25%,16%)" : "hsl(220,10%,95%)"}` : "none"
+                  background: isFirst ? "#0A00A0" : "#fff",
+                  borderBottom: i < upcoming.length - 1 ? `1px solid ${isFirst ? "#000000" : "hsl(220,10%,95%)"}` : "none"
                 }}>
                   <div style={{
                     width: 40, height: 40, borderRadius: 9, flexShrink: 0,
                     background: isFirst ? "rgba(255,255,255,0.1)" : "hsl(220,10%,97%)",
                     display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"
                   }}>
-                    <span style={{ fontSize: 16, fontWeight: 800, lineHeight: 1, color: isFirst ? "#fff" : "hsl(222,25%,10%)" }}>{day}</span>
-                    <span style={{ fontSize: 9, fontWeight: 700, color: isFirst ? "hsl(42,90%,60%)" : "hsl(220,8%,55%)", letterSpacing: "0.05em" }}>{mon}</span>
+                    <span style={{ fontSize: 16, fontWeight: 800, lineHeight: 1, color: isFirst ? "#fff" : "#0A00A0" }}>{day}</span>
+                    <span style={{ fontSize: 9, fontWeight: 700, color: isFirst ? "#F6F6F6" : "hsl(220,8%,55%)", letterSpacing: "0.05em" }}>{mon}</span>
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <p style={{ fontSize: 12, fontWeight: 700, color: isFirst ? "#fff" : "hsl(222,25%,10%)", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{d.title}</p>
+                    <p style={{ fontSize: 12, fontWeight: 700, color: isFirst ? "#fff" : "#0A00A0", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{d.title}</p>
                     <p style={{ fontSize: 11, color: isFirst ? "rgba(255,255,255,0.45)" : "hsl(220,8%,60%)", margin: "2px 0 0", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{d.client}</p>
                   </div>
                 </div>
@@ -333,7 +333,7 @@ export default function Dashboard() {
                   : <Clock size={14} color="hsl(220,8%,60%)" style={{ flexShrink: 0 }} />
                 }
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <p style={{ fontSize: 12, fontWeight: 600, color: "hsl(222,25%,10%)", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{t.title}</p>
+                  <p style={{ fontSize: 12, fontWeight: 600, color: "#0A00A0", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{t.title}</p>
                   {t.dossier_name && <p style={{ fontSize: 11, color: "hsl(220,8%,60%)", margin: "1px 0 0", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{t.dossier_name}</p>}
                 </div>
                 {t.due_date && <span style={{ fontSize: 10, color: "hsl(220,8%,60%)", flexShrink: 0 }}>{t.due_date}</span>}

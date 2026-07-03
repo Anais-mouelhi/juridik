@@ -1,7 +1,7 @@
 import { Outlet, Link, useLocation } from "react-router-dom";
 import {
   LayoutDashboard, Search, FolderOpen, CheckSquare, Calendar,
-  Scale, LogOut, MailSearch, Bell, Menu, X
+  LogOut, MailSearch, Bell, Menu, X
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
@@ -41,9 +41,9 @@ export default function Layout() {
         {/* Logo */}
         <Link to="/" style={{
           display: "flex", alignItems: "center", justifyContent: "center",
-          width: 36, height: 36, borderRadius: 10, background: "hsl(222,25%,10%)", marginBottom: 12
+          width: 36, height: 36, borderRadius: 10, overflow: "hidden", background: "#000", marginBottom: 12
         }}>
-          <Scale size={16} color="#fff" />
+          <img src="https://media.base44.com/images/public/6a4788f5f5d765f8a1df53f8/a3b22e944_BlueandWhiteGeometricModernCreativeLogo-4.png" alt="JurisIA" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
         </Link>
 
         {/* Nav */}
@@ -55,12 +55,12 @@ export default function Layout() {
                 <Link to={item.path} style={{
                   display: "flex", alignItems: "center", justifyContent: "center",
                   width: 40, height: 40, borderRadius: 10, margin: "0 auto",
-                  background: isActive ? "hsl(222,25%,10%)" : "transparent",
+                  background: isActive ? "#0A00A0" : "transparent",
                   color: isActive ? "#fff" : "hsl(220,8%,55%)",
                   transition: "all 0.15s",
                   textDecoration: "none"
                 }}
-                  onMouseEnter={e => { if (!isActive) { e.currentTarget.style.background = "hsl(220,10%,94%)"; e.currentTarget.style.color = "hsl(222,25%,10%)"; }}}
+                  onMouseEnter={e => { if (!isActive) { e.currentTarget.style.background = "hsl(220,10%,94%)"; e.currentTarget.style.color = "#0A00A0"; }}}
                   onMouseLeave={e => { if (!isActive) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "hsl(220,8%,55%)"; }}}
                 >
                   <item.icon size={18} />
@@ -68,7 +68,7 @@ export default function Layout() {
                 {/* Tooltip */}
                 <div style={{
                   position: "absolute", left: "calc(100% + 10px)", top: "50%", transform: "translateY(-50%)",
-                  background: "hsl(222,25%,10%)", color: "#fff", fontSize: 12, fontWeight: 600,
+                  background: "#0A00A0", color: "#fff", fontSize: 12, fontWeight: 600,
                   padding: "6px 12px", borderRadius: 8, whiteSpace: "nowrap",
                   pointerEvents: "none", opacity: 0, transition: "opacity 0.15s", zIndex: 100,
                   boxShadow: "0 4px 12px rgba(0,0,0,0.15)"
@@ -85,7 +85,7 @@ export default function Layout() {
           <Link to="/profil" style={{
             display: "flex", alignItems: "center", justifyContent: "center",
             width: 36, height: 36, borderRadius: "50%",
-            background: "hsl(42,90%,50%)", color: "hsl(222,25%,10%)",
+            background: "#0A00A0", color: "#0A00A0",
             fontSize: 12, fontWeight: 700, textDecoration: "none"
           }}>
             {initials}
@@ -148,7 +148,7 @@ export default function Layout() {
           {/* Avatar */}
           <Link to="/profil" style={{
             width: 32, height: 32, borderRadius: "50%",
-            background: "hsl(222,25%,10%)", color: "#fff",
+            background: "#0A00A0", color: "#fff",
             fontSize: 12, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center",
             textDecoration: "none"
           }}>
@@ -173,10 +173,10 @@ export default function Layout() {
           }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <div style={{ width: 32, height: 32, borderRadius: 8, background: "hsl(222,25%,10%)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <Scale size={15} color="#fff" />
+                <div style={{ width: 32, height: 32, borderRadius: 8, overflow: "hidden", background: "#000", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <img src="https://media.base44.com/images/public/6a4788f5f5d765f8a1df53f8/a3b22e944_BlueandWhiteGeometricModernCreativeLogo-4.png" alt="JurisIA" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                 </div>
-                <span style={{ fontSize: 14, fontWeight: 700, color: "hsl(222,25%,10%)" }}>JurisIA</span>
+                <span style={{ fontSize: 14, fontWeight: 700, color: "#0A00A0" }}>JurisIA</span>
               </div>
               <button onClick={() => setMobileOpen(false)} style={{ color: "hsl(220,8%,55%)", background: "none", border: "none", cursor: "pointer" }}>
                 <X size={16} />
@@ -189,7 +189,7 @@ export default function Layout() {
                   <Link key={item.path} to={item.path} onClick={() => setMobileOpen(false)} style={{
                     display: "flex", alignItems: "center", gap: 10,
                     padding: "9px 12px", borderRadius: 10, fontSize: 13, fontWeight: 500,
-                    background: isActive ? "hsl(222,25%,10%)" : "transparent",
+                    background: isActive ? "#0A00A0" : "transparent",
                     color: isActive ? "#fff" : "hsl(220,8%,55%)", textDecoration: "none"
                   }}>
                     <item.icon size={16} />

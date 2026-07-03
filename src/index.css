@@ -8,50 +8,50 @@
   :root {
     --font-sans: 'Plus Jakarta Sans', sans-serif;
 
-    /* Encre + Or — fidèle au screenshot */
+    /* Bleu profond + Blanc cassé + Noir — fidèle au logo */
     --background: 0 0% 96%;
-    --foreground: 222 25% 10%;
+    --foreground: 244 100% 31%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222 25% 10%;
+    --card-foreground: 244 100% 31%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 25% 10%;
+    --popover-foreground: 244 100% 31%;
 
-    --primary: 222 25% 10%;
+    --primary: 244 100% 31%;
     --primary-foreground: 0 0% 100%;
 
-    --gold: 42 90% 50%;
-    --gold-light: 42 90% 96%;
-    --gold-foreground: 222 25% 10%;
+    --gold: 244 100% 31%;
+    --gold-light: 244 100% 96%;
+    --gold-foreground: 0 0% 100%;
 
     --secondary: 220 10% 94%;
-    --secondary-foreground: 222 15% 35%;
+    --secondary-foreground: 244 60% 35%;
 
     --muted: 220 10% 94%;
     --muted-foreground: 220 8% 55%;
 
-    --accent: 42 90% 50%;
-    --accent-foreground: 222 25% 10%;
+    --accent: 244 100% 31%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 98%;
 
     --border: 220 10% 90%;
     --input: 220 10% 90%;
-    --ring: 42 90% 50%;
+    --ring: 244 100% 31%;
 
     --radius: 0.625rem;
 
     /* Sidebar : blanc/gris très clair comme dans le screenshot */
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 220 8% 52%;
-    --sidebar-primary: 42 90% 50%;
-    --sidebar-primary-foreground: 222 25% 10%;
+    --sidebar-primary: 244 100% 31%;
+    --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 220 10% 94%;
-    --sidebar-accent-foreground: 222 25% 10%;
+    --sidebar-accent-foreground: 244 100% 31%;
     --sidebar-border: 220 10% 90%;
-    --sidebar-ring: 42 90% 50%;
+    --sidebar-ring: 244 100% 31%;
   }
 }
 
@@ -76,19 +76,19 @@
   to { transform: rotate(360deg); }
 }
 
-/* Gold accent utilities */
+/* Blue accent utilities (alignées sur le logo) */
 .gold-dot {
-  background: hsl(42 85% 52%);
+  background: hsl(244 100% 31%);
 }
 .border-gold {
-  border-color: hsl(42 85% 52%);
+  border-color: hsl(244 100% 31%);
 }
 .text-gold {
-  color: hsl(42 85% 52%);
+  color: hsl(244 100% 31%);
 }
 .bg-gold {
-  background: hsl(42 85% 52%);
+  background: hsl(244 100% 31%);
 }
 .bg-gold-light {
-  background: hsl(42 85% 95%);
+  background: hsl(244 100% 96%);
 }
