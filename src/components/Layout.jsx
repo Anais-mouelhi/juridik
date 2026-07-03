@@ -42,7 +42,7 @@ export default function Layout() {
         {/* Logo */}
         <Link to="/" style={{
           display: "flex", alignItems: "center", justifyContent: "center",
-          width: 36, height: 36, borderRadius: 50, overflow: "hidden", background: "#000", marginBottom: 12
+          width: 36, height: 36, borderRadius: 50, overflow: "hidden", background: "transparent", marginBottom: 12
         }}>
           <img src="https://media.base44.com/images/public/6a4788f5f5d765f8a1df53f8/a3b22e944_BlueandWhiteGeometricModernCreativeLogo-4.png" alt="JurisIA" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
         </Link>
@@ -174,7 +174,7 @@ export default function Layout() {
           }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <div style={{ width: 32, height: 32, borderRadius: 8, overflow: "hidden", background: "#000", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <div style={{ width: 32, height: 32, borderRadius: 8, overflow: "hidden", background: "transparent", display: "flex", alignItems: "center", justifyContent: "center" }}>
                   <img src="https://media.base44.com/images/public/6a4788f5f5d765f8a1df53f8/a3b22e944_BlueandWhiteGeometricModernCreativeLogo-4.png" alt="JurisIA" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                 </div>
                 <span style={{ fontSize: 14, fontWeight: 700, color: "#1A1A1A" }}>JurisIA</span>
