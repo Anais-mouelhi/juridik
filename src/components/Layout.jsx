@@ -28,20 +28,21 @@ export default function Layout() {
     ?.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase() || "?";
 
   return (
-    <div style={{ display: "flex", width: "100vw", height: "100vh", overflow: "hidden", background: "hsl(0,0%,96%)" }}>
+    <div style={{ display: "flex", width: "100vw", height: "100vh", overflow: "hidden", background: "#F0EEF6" }}>
 
       {/* ── Slim sidebar ── */}
       <aside style={{
         width: 58, minWidth: 58, height: "100vh",
-        background: "#fff",
-        borderRight: "1px solid hsl(220,10%,90%)",
+        background: "rgba(255,255,255,0.7)",
+        backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)",
+        borderRight: "1px solid rgba(0,0,0,0.06)",
         display: "flex", flexDirection: "column", alignItems: "center",
         paddingTop: 12, paddingBottom: 12, gap: 2, zIndex: 30, flexShrink: 0
       }}>
         {/* Logo */}
         <Link to="/" style={{
           display: "flex", alignItems: "center", justifyContent: "center",
-          width: 36, height: 36, borderRadius: 10, overflow: "hidden", background: "#000", marginBottom: 12
+          width: 36, height: 36, borderRadius: 50, overflow: "hidden", background: "#000", marginBottom: 12
         }}>
           <img src="https://media.base44.com/images/public/6a4788f5f5d765f8a1df53f8/a3b22e944_BlueandWhiteGeometricModernCreativeLogo-4.png" alt="JurisIA" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
         </Link>
@@ -54,21 +55,21 @@ export default function Layout() {
               <div key={item.path} style={{ position: "relative" }} className="group">
                 <Link to={item.path} style={{
                   display: "flex", alignItems: "center", justifyContent: "center",
-                  width: 40, height: 40, borderRadius: 10, margin: "0 auto",
-                  background: isActive ? "#0A00A0" : "transparent",
-                  color: isActive ? "#fff" : "hsl(220,8%,55%)",
+                  width: 40, height: 40, borderRadius: 50, margin: "0 auto",
+                  background: isActive ? "#1A1A1A" : "transparent",
+                  color: isActive ? "#fff" : "#666",
                   transition: "all 0.15s",
                   textDecoration: "none"
                 }}
-                  onMouseEnter={e => { if (!isActive) { e.currentTarget.style.background = "hsl(220,10%,94%)"; e.currentTarget.style.color = "#0A00A0"; }}}
-                  onMouseLeave={e => { if (!isActive) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "hsl(220,8%,55%)"; }}}
+                  onMouseEnter={e => { if (!isActive) { e.currentTarget.style.background = "rgba(0,0,0,0.05)"; e.currentTarget.style.color = "#1A1A1A"; }}}
+                  onMouseLeave={e => { if (!isActive) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#666"; }}}
                 >
                   <item.icon size={18} />
                 </Link>
                 {/* Tooltip */}
                 <div style={{
                   position: "absolute", left: "calc(100% + 10px)", top: "50%", transform: "translateY(-50%)",
-                  background: "#0A00A0", color: "#fff", fontSize: 12, fontWeight: 600,
+                  background: "#1A1A1A", color: "#fff", fontSize: 12, fontWeight: 600,
                   padding: "6px 12px", borderRadius: 8, whiteSpace: "nowrap",
                   pointerEvents: "none", opacity: 0, transition: "opacity 0.15s", zIndex: 100,
                   boxShadow: "0 4px 12px rgba(0,0,0,0.15)"
@@ -85,7 +86,7 @@ export default function Layout() {
           <Link to="/profil" style={{
             display: "flex", alignItems: "center", justifyContent: "center",
             width: 36, height: 36, borderRadius: "50%",
-            background: "#0A00A0", color: "#0A00A0",
+            background: "#1A1A1A", color: "#fff",
             fontSize: 12, fontWeight: 700, textDecoration: "none"
           }}>
             {initials}
@@ -99,8 +100,8 @@ export default function Layout() {
         {/* Topbar */}
         <header style={{
           height: 52, minHeight: 52,
-          background: "#fff",
-          borderBottom: "1px solid hsl(220,10%,90%)",
+          background: "rgba(255,255,255,0.7)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)",
+          borderBottom: "1px solid rgba(0,0,0,0.06)",
           display: "flex", alignItems: "center", gap: 12,
           padding: "0 20px", flexShrink: 0, zIndex: 20
         }}>
@@ -112,8 +113,8 @@ export default function Layout() {
           {/* Search bar */}
           <div style={{
             display: "flex", alignItems: "center", gap: 8,
-            background: "hsl(220,10%,97%)", border: "1px solid hsl(220,10%,90%)",
-            borderRadius: 8, padding: "6px 12px", width: 220, flexShrink: 0
+            background: "rgba(255,255,255,0.6)", border: "1px solid rgba(0,0,0,0.06)",
+            borderRadius: 999, padding: "6px 12px", width: 220, flexShrink: 0
           }}>
             <Search size={13} color="hsl(220,8%,55%)" />
             <span style={{ fontSize: 13, color: "hsl(220,8%,60%)", flex: 1 }}>Rechercher…</span>
@@ -138,9 +139,9 @@ export default function Layout() {
 
           {/* Bell */}
           <button style={{
-            width: 34, height: 34, borderRadius: 8, border: "1px solid hsl(220,10%,90%)",
-            background: "#fff", display: "flex", alignItems: "center", justifyContent: "center",
-            cursor: "pointer", color: "hsl(220,8%,55%)"
+            width: 34, height: 34, borderRadius: 50, border: "1px solid rgba(0,0,0,0.06)",
+            background: "rgba(255,255,255,0.6)", display: "flex", alignItems: "center", justifyContent: "center",
+            cursor: "pointer", color: "#666"
           }}>
             <Bell size={15} />
           </button>
@@ -148,7 +149,7 @@ export default function Layout() {
           {/* Avatar */}
           <Link to="/profil" style={{
             width: 32, height: 32, borderRadius: "50%",
-            background: "#0A00A0", color: "#fff",
+            background: "#1A1A1A", color: "#fff",
             fontSize: 12, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center",
             textDecoration: "none"
           }}>
@@ -167,7 +168,7 @@ export default function Layout() {
         <div style={{ position: "fixed", inset: 0, zIndex: 50, display: "flex" }}>
           <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.3)" }} onClick={() => setMobileOpen(false)} />
           <aside style={{
-            position: "relative", zIndex: 10, width: 220, background: "#fff",
+            position: "relative", zIndex: 10, width: 220, background: "rgba(255,255,255,0.9)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)",
             height: "100%", display: "flex", flexDirection: "column", padding: "20px 16px",
             borderRight: "1px solid hsl(220,10%,90%)"
           }}>
@@ -176,7 +177,7 @@ export default function Layout() {
                 <div style={{ width: 32, height: 32, borderRadius: 8, overflow: "hidden", background: "#000", display: "flex", alignItems: "center", justifyContent: "center" }}>
                   <img src="https://media.base44.com/images/public/6a4788f5f5d765f8a1df53f8/a3b22e944_BlueandWhiteGeometricModernCreativeLogo-4.png" alt="JurisIA" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                 </div>
-                <span style={{ fontSize: 14, fontWeight: 700, color: "#0A00A0" }}>JurisIA</span>
+                <span style={{ fontSize: 14, fontWeight: 700, color: "#1A1A1A" }}>JurisIA</span>
               </div>
               <button onClick={() => setMobileOpen(false)} style={{ color: "hsl(220,8%,55%)", background: "none", border: "none", cursor: "pointer" }}>
                 <X size={16} />
@@ -189,8 +190,8 @@ export default function Layout() {
                   <Link key={item.path} to={item.path} onClick={() => setMobileOpen(false)} style={{
                     display: "flex", alignItems: "center", gap: 10,
                     padding: "9px 12px", borderRadius: 10, fontSize: 13, fontWeight: 500,
-                    background: isActive ? "#0A00A0" : "transparent",
-                    color: isActive ? "#fff" : "hsl(220,8%,55%)", textDecoration: "none"
+                    background: isActive ? "#1A1A1A" : "transparent",
+                    color: isActive ? "#fff" : "#666", textDecoration: "none"
                   }}>
                     <item.icon size={16} />
                     {item.label}
