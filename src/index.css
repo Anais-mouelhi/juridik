@@ -72,6 +72,15 @@
   box-shadow: 0 4px 16px 0 rgba(10, 14, 30, 0.09);
 }
 
+/* Modern hover lift for interactive glass cards */
+.lift {
+  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+  will-change: transform;
+}
+.lift:hover {
+  transform: translateY(-5px);
+}
+
 @keyframes spin {
   to { transform: rotate(360deg); }
 }

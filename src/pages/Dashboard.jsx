@@ -22,12 +22,12 @@ const INK = "#1A1A1A";
 const SUB = "#666";
 const LINE = "rgba(0,0,0,0.06)";
 const glass = {
-  background: "rgba(255,255,255,0.6)",
-  backdropFilter: "blur(16px)",
-  WebkitBackdropFilter: "blur(16px)",
-  border: "1px solid rgba(255,255,255,0.8)",
-  borderRadius: 26,
-  boxShadow: "0 12px 40px rgba(40,20,80,0.10)",
+  background: "rgba(255,255,255,0.65)",
+  backdropFilter: "blur(18px)",
+  WebkitBackdropFilter: "blur(18px)",
+  border: "1px solid rgba(255,255,255,0.9)",
+  borderRadius: 28,
+  boxShadow: "0 20px 50px -12px rgba(120,100,200,0.18), 0 2px 8px rgba(0,0,0,0.03)",
 };
 
 export default function Dashboard() {
@@ -63,7 +63,11 @@ export default function Dashboard() {
   const greeting = hour < 12 ? "Bonjour" : hour < 18 ? "Bon après-midi" : "Bonsoir";
 
   return (
-    <div style={{ padding: "30px 34px", background: BG, minHeight: "100%", boxSizing: "border-box" }}>
+    <div style={{ padding: "30px 34px", background: BG, minHeight: "100%", boxSizing: "border-box", position: "relative", overflowX: "hidden" }}>
+      {/* aurora orbs */}
+      <div style={{ position: "absolute", top: -90, left: -70, width: 340, height: 340, borderRadius: "50%", background: "radial-gradient(circle, rgba(196,192,255,0.5) 0%, transparent 70%)", filter: "blur(45px)", pointerEvents: "none", zIndex: -1 }} />
+      <div style={{ position: "absolute", bottom: 40, right: -70, width: 320, height: 320, borderRadius: "50%", background: "radial-gradient(circle, rgba(207,252,120,0.25) 0%, transparent 70%)", filter: "blur(55px)", pointerEvents: "none", zIndex: -1 }} />
+      <div style={{ position: "absolute", top: 220, right: 30, width: 240, height: 240, borderRadius: "50%", background: "radial-gradient(circle, rgba(180,170,230,0.4) 0%, transparent 70%)", filter: "blur(40px)", pointerEvents: "none", zIndex: -1 }} />
 
       {/* ── Hero header ── */}
       <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}
@@ -72,8 +76,8 @@ export default function Dashboard() {
           <p style={{ fontSize: 11, fontWeight: 700, color: SUB, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 6, opacity: 0.8 }}>
             {new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
           </p>
-          <h1 style={{ fontSize: 32, fontWeight: 800, color: "#000", margin: 0, letterSpacing: "-0.6px" }}>
-            {greeting}, {firstName} 👋
+          <h1 style={{ fontSize: 34, fontWeight: 800, color: "#000", margin: 0, letterSpacing: "-0.6px", lineHeight: 1.1 }}>
+            {greeting}, <span style={{ background: "linear-gradient(120deg, #6C5CE7 0%, #1A1A1A 100%)", WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>{firstName}</span> 👋
           </h1>
           <p style={{ fontSize: 14, color: SUB, marginTop: 8, margin: 0 }}>
             {urgentDossiers.length > 0
@@ -103,7 +107,7 @@ export default function Dashboard() {
         ].map((s, i) => (
           <motion.div key={s.label} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.05 + i * 0.07 }}>
             <Link to={s.href} style={{ textDecoration: "none" }}>
-              <div style={{ ...glass, padding: "20px 22px", cursor: "pointer", transition: "all 0.18s" }}>
+              <div className="lift" style={{ ...glass, padding: "20px 22px", cursor: "pointer" }}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
                   <div style={{ width: 36, height: 36, borderRadius: 12, background: "rgba(0,0,0,0.05)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                     <s.icon size={17} color={INK} />
@@ -131,10 +135,10 @@ export default function Dashboard() {
 
               {/* Recherche — dark card */}
               <Link to="/search" style={{ textDecoration: "none" }}>
-                <div style={{
-                  background: INK, borderRadius: 26, padding: "22px",
-                  boxShadow: "0 12px 40px rgba(0,0,0,0.20)", cursor: "pointer",
-                  border: "1px solid rgba(255,255,255,0.06)"
+                <div className="lift" style={{
+                  background: "linear-gradient(135deg, #1A1A1A 0%, #2B2740 100%)", borderRadius: 28, padding: "22px",
+                  boxShadow: "0 20px 50px -12px rgba(0,0,0,0.4)", cursor: "pointer",
+                  border: "1px solid rgba(255,255,255,0.08)"
                 }}>
                   <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 22 }}>
                     <div style={{ width: 38, height: 38, borderRadius: 13, background: "rgba(255,255,255,0.1)", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -149,7 +153,7 @@ export default function Dashboard() {
 
               {/* Analyse mails */}
               <Link to="/analyse-mails" style={{ textDecoration: "none" }}>
-                <div style={{ ...glass, padding: "22px", cursor: "pointer" }}>
+                <div className="lift" style={{ ...glass, padding: "22px", cursor: "pointer" }}>
                   <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 22 }}>
                     <div style={{ width: 38, height: 38, borderRadius: 13, background: "rgba(0,0,0,0.05)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                       <MailSearch size={17} color={INK} />
@@ -163,7 +167,7 @@ export default function Dashboard() {
 
               {/* Dossiers */}
               <Link to="/dossiers" style={{ textDecoration: "none" }}>
-                <div style={{ ...glass, padding: "22px", cursor: "pointer" }}>
+                <div className="lift" style={{ ...glass, padding: "22px", cursor: "pointer" }}>
                   <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 22 }}>
                     <div style={{ width: 38, height: 38, borderRadius: 13, background: "rgba(0,0,0,0.05)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                       <FolderOpen size={17} color={INK} />
