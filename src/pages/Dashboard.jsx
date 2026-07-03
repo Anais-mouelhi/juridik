@@ -22,12 +22,12 @@ const INK = "#1A1A1A";
 const SUB = "#666";
 const LINE = "rgba(0,0,0,0.06)";
 const glass = {
-  background: "rgba(255,255,255,0.5)",
-  backdropFilter: "blur(22px) saturate(160%)",
-  WebkitBackdropFilter: "blur(22px) saturate(160%)",
-  border: "1px solid rgba(255,255,255,0.85)",
+  background: "rgba(255,255,255,0.4)",
+  backdropFilter: "blur(24px) saturate(160%)",
+  WebkitBackdropFilter: "blur(24px) saturate(160%)",
+  border: "1px solid rgba(255,255,255,0.75)",
   borderRadius: 28,
-  boxShadow: "0 20px 50px -12px rgba(120,100,200,0.22), inset 0 1px 0 0 rgba(255,255,255,0.6)",
+  boxShadow: "0 20px 50px -12px rgba(120,100,200,0.22), inset 0 1px 0 0 rgba(255,255,255,0.5)",
 };
 
 export default function Dashboard() {
@@ -68,6 +68,8 @@ export default function Dashboard() {
       <div style={{ position: "absolute", top: -90, left: -70, width: 340, height: 340, borderRadius: "50%", background: "radial-gradient(circle, rgba(196,192,255,0.5) 0%, transparent 70%)", filter: "blur(45px)", pointerEvents: "none", zIndex: -1 }} />
       <div style={{ position: "absolute", bottom: 40, right: -70, width: 320, height: 320, borderRadius: "50%", background: "radial-gradient(circle, rgba(207,252,120,0.25) 0%, transparent 70%)", filter: "blur(55px)", pointerEvents: "none", zIndex: -1 }} />
       <div style={{ position: "absolute", top: 220, right: 30, width: 240, height: 240, borderRadius: "50%", background: "radial-gradient(circle, rgba(180,170,230,0.4) 0%, transparent 70%)", filter: "blur(40px)", pointerEvents: "none", zIndex: -1 }} />
+      <div style={{ position: "absolute", top: 300, left: 140, width: 380, height: 380, borderRadius: "50%", background: "radial-gradient(circle, rgba(196,192,255,0.45) 0%, transparent 70%)", filter: "blur(50px)", pointerEvents: "none", zIndex: -1 }} />
+      <div style={{ position: "absolute", top: 560, right: 180, width: 300, height: 300, borderRadius: "50%", background: "radial-gradient(circle, rgba(207,252,120,0.32) 0%, transparent 70%)", filter: "blur(55px)", pointerEvents: "none", zIndex: -1 }} />
 
       {/* ── Hero header ── */}
       <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}
@@ -105,7 +107,7 @@ export default function Dashboard() {
           { icon: CheckSquare, label: "Tâches en cours",   value: tasks.length,      sub: `${urgentTasks.length} urgente${urgentTasks.length!==1?'s':''}`, href: "/taches" },
           { icon: Calendar,    label: "Audiences",         value: dossiers.filter(d=>d.next_hearing).length, sub: "Planifiées", href: "/calendrier" },
         ].map((s, i) => (
-          <motion.div key={s.label} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.05 + i * 0.07 }}>
+          <motion.div key={s.label} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3, delay: 0.05 + i * 0.07 }}>
             <Link to={s.href} style={{ textDecoration: "none" }}>
               <div className="lift" style={{ ...glass, padding: "20px 22px", cursor: "pointer" }}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
@@ -130,7 +132,7 @@ export default function Dashboard() {
         <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
 
           {/* Quick actions */}
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.32 }}>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3, delay: 0.32 }}>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 14 }}>
 
               {/* Recherche — dark card */}
@@ -182,7 +184,7 @@ export default function Dashboard() {
           </motion.div>
 
           {/* Dossiers récents */}
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.4 }}>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3, delay: 0.4 }}>
             <div style={{ ...glass, overflow: "hidden" }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "15px 22px", borderBottom: `1px solid ${LINE}` }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -226,7 +228,7 @@ export default function Dashboard() {
 
           {/* Recent searches */}
           {searches.length > 0 && (
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.48 }}>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3, delay: 0.48 }}>
               <div style={{ ...glass, overflow: "hidden" }}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "15px 22px", borderBottom: `1px solid ${LINE}` }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -262,7 +264,7 @@ export default function Dashboard() {
         </div>
 
         {/* RIGHT column */}
-        <motion.div initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.35, delay: 0.22 }}
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.35, delay: 0.22 }}
           style={{ display: "flex", flexDirection: "column", gap: 16 }}>
 
           {/* Upcoming hearings */}
